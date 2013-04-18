@@ -2,7 +2,7 @@
 #include "MathHelper.h"
 
 Camera::Camera()
-	: mPosition(0.0f, 0.0f, 0.0f), 
+	: mPosition(0.0f, 0.0f, -2.4f), 
 	  mRight(1.0f, 0.0f, 0.0f),
 	  mUp(0.0f, 1.0f, 0.0f),
 	  mLook(0.0f, 0.0f, 1.0f)
@@ -122,6 +122,13 @@ void Camera::SetLens(float fovY, float aspect, float zn, float zf)
 	mFarWindowHeight  = 2.0f * mFarZ * tanf( 0.5f*mFovY );
 
 	XMMATRIX P = XMMatrixPerspectiveFovLH(mFovY, mAspect, mNearZ, mFarZ);
+	XMStoreFloat4x4(&mProj, P);
+}
+
+void Camera::SetLensOrtho(float l, float r, float b, float t, float zn, float zf)
+{
+	XMMATRIX P = XMMatrixOrthographicOffCenterLH(l, r, b, t, zn, zf);
+
 	XMStoreFloat4x4(&mProj, P);
 }
 
