@@ -36,7 +36,7 @@ public:
 
 	
 	ID3D11Buffer *worldCBuffer;
-	XMFLOAT4X4 mWorldMat;
+	XMFLOAT4X4 mWorldMat[2];
 
 	Object();
 	void objLoad( char* filename, vector<LPSTR > *textures, vector<LPSTR > *NormTextures, ID3D11Device* devv, ID3D11DeviceContext *devcon, Apex* apex );

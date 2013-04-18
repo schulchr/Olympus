@@ -8,6 +8,7 @@ cbuffer ConstantBuffer : register(b0)
 cbuffer worldBuffer	   : register(b1)
 {
     float4x4 matWorld;
+	float4x4 matWorldInvTrans;
 }
 
 struct DirectionalLight
@@ -58,6 +59,8 @@ struct VOut
 	float2 Tex	: TEXCOORD;
 	float4 norm : NORMAL;
 	float3 viewDirection :VIEWDIRECTION;
+	float4 Tangent	: TANGENT;
+	float4 BiNormal	: BINORMAL;
 	int  Texnum : TEXNUM;
 };
 
@@ -86,13 +89,15 @@ VOut VShader( Vin input )
 
     output.posH = mul( mul(matFinal, matWorld), input.Pos );
 
-	output.norm = normalize(mul(matWorld, input.Normal));
+	output.norm = normalize(mul(input.Normal, matWorldInvTrans));
 
     output.posL = input.Pos;
 	output.Tex = input.Tex;
 	output.Texnum = input.TexNum;
 
-	
+	output.BiNormal =	normalize(mul(matWorld, input.BiNormal));
+	output.Tangent	=	normalize(mul(matWorld, input.Tangent));
+
 	output.posW = mul(input.Pos, matWorld);
 
 	output.viewDirection = normalize(cameraPos.xyz - output.posW.xyz);
@@ -104,6 +109,7 @@ VOut VShader( Vin input )
 float4 PShader(VOut input) : SV_TARGET
 {
 	float4 textureColor;
+	float4 normalColor;
     float3 lightDir;
     float lightIntensity;
     float4 color;
@@ -120,24 +126,42 @@ float4 PShader(VOut input) : SV_TARGET
 
 	textureColor = diffuseTexture[0].Sample( samLinear, input.Tex );
 
+	normalColor  = normalTexture[0].Sample( samLinear, input.Tex );
+
+	//normal mapping
+
+	// Uncompress each component from [0,1] to [-1,1].
+	float3 normalT = 2.0f*normalColor - 1.0f;
+
+	// Build orthonormal basis.
+	float3 N = input.norm;
+	float3 T = normalize(input.Tangent - dot(input.Tangent, N)*N);
+	float3 B = cross(N, T);
+
+	float3x3 TBN = float3x3(T, B, N);
+
+	// Transform from tangent space to world space.
+	float3 bumpedNormalW = normalize(mul(normalT, TBN));
+
+
 	[unroll]
 	for(int i = 0; i < 2; i++)
 	{
 		ambient = dirLight[i].Ambient.xyz;
 
 		//Compute directional lighting
-		diffuse = dirLight[i].Diffuse * saturate(dot(input.norm.xyz, -dirLight[i].Direction.xyz));
-	
+		diffuse = dirLight[i].Diffuse * saturate(dot(bumpedNormalW, -dirLight[i].Direction.xyz));
+
 		halfway = normalize(-dirLight[i].Direction.xyz + input.viewDirection);
 
-		specular.xyz = pow(saturate(dot(input.norm.xyz, halfway)), dirLight[i].SpecPower) * dirLight[i].Specular;
+		specular.xyz = pow(saturate(dot(bumpedNormalW, halfway)), dirLight[i].SpecPower) * dirLight[i].Specular;
 
 		totalAmbient.xyz +=  ambient.xyz;
 		totalDiffuse.xyz +=  diffuse.xyz;
 		totalSpec.xyz	 +=  specular.xyz;
 
 	}
-	
+
 	//Compute point lighting
 	float4 pAmbient = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 pDiffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -161,12 +185,12 @@ float4 PShader(VOut input) : SV_TARGET
 
 		pAmbient += pLight[i].Ambient;
 
-		float diffuseFactor = dot(lightVec, input.norm);
+		float diffuseFactor = dot(lightVec, bumpedNormalW);
 
 		[flatten]
 		if( diffuseFactor > 0.0f )
 		{
-			float3 v         = reflect(-lightVec, input.norm);
+			float3 v         = reflect(-lightVec, bumpedNormalW);
 
 			pDiffuse += diffuseFactor * pLight[i].Diffuse;
 		}
@@ -175,7 +199,7 @@ float4 PShader(VOut input) : SV_TARGET
 
 		pDiffuse *= att*(d / pLight[i].Range );
 
-	
+
 		float softie = .75;
 
 		if( d < softie*pLight[i].Range )
@@ -187,14 +211,14 @@ float4 PShader(VOut input) : SV_TARGET
 		}
 
 
-		
+
 
 	}	
 
 	totalAmbient.xyz +=  pAmbient.xyz;
-		
+
 	totalDiffuse.xyz +=  pDiffuse.xyz;
-		
+
 	totalSpec.xyz	 +=  pSpec.xyz;
 
 	color = textureColor*(totalAmbient + totalDiffuse) + totalSpec;
@@ -203,6 +227,3 @@ float4 PShader(VOut input) : SV_TARGET
 
     return color;
 }
-
-
-

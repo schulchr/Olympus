@@ -111,7 +111,7 @@ void Object::objLoad( char* filename, vector<LPSTR> *textures, vector<LPSTR> *No
 	ZeroMemory(&bd, sizeof(bd));
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = 64;
+    bd.ByteWidth = 64 * 2;
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     dev1->CreateBuffer(&bd, NULL, &worldCBuffer);
@@ -152,7 +152,9 @@ void Object::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
 		devcon1->VSSetShader(opVS, 0, 0);
 		devcon1->PSSetShader(opPS, 0, 0);
 
-		XMStoreFloat4x4(&mWorldMat, XMMatrixScaling(5.0f,5.0f,5.0f));
+		XMStoreFloat4x4(&mWorldMat[0], XMMatrixScaling(5.0f,5.0f,5.0f));
+
+		XMStoreFloat4x4(&mWorldMat[1], XMMatrixInverse(&XMMatrixDeterminant(XMLoadFloat4x4(&mWorldMat[0])), XMLoadFloat4x4(&mWorldMat[0])));
 
 		devcon1->VSSetConstantBuffers(1, 1, &worldCBuffer);
 

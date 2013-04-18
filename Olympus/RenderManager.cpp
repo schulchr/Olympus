@@ -88,7 +88,7 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 
 	free(geoGen);
 
-	renderables.push_back(emitter);
+	//renderables.push_back(emitter);
 	renderables.push_back(particles);
     
     D3D11_BUFFER_DESC bd;
@@ -194,15 +194,15 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	
 	mDirLight[0].Ambient =		XMFLOAT4(.1f, .1f, .1f, 1);
 	mDirLight[0].Diffuse =		XMFLOAT4(.6f, .6f, .6f, 1);
-	mDirLight[0].Direction =	XMFLOAT4(0, 5, 0, 1);
+	mDirLight[0].Direction =	XMFLOAT4(0, 0, -5, 1);
 	mDirLight[0].Specular =		XMFLOAT4(1, 1, 1, 1);
-	mDirLight[0].SpecPower =	10.0f;
+	mDirLight[0].SpecPower =	8.0f;
 
 	mDirLight[1].Ambient =		XMFLOAT4(.3f, .3f, .3f, 1);
 	mDirLight[1].Diffuse =		XMFLOAT4(.6f, .6f, .6f, 1);
 	mDirLight[1].Direction =	XMFLOAT4(5, 0, 0, 1);
 	mDirLight[1].Specular =		XMFLOAT4(1, 1, 1, 1);
-	mDirLight[1].SpecPower =	10.0f;
+	mDirLight[1].SpecPower =	8.0f;
 
 
 	//Set the point light
@@ -218,14 +218,14 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	mPointLight[0].Att     = XMFLOAT3(1.0f, .05f, .0075f);
 	mPointLight[0].Diffuse = XMFLOAT4(.6f, .0f, .0f, 1);
 	mPointLight[0].Specular = XMFLOAT4(1, 1, 1, 1);
-	mPointLight[0].Range    = 6.0f;
-	mPointLight[0].Position = XMFLOAT3(5, 0, 0);
+	mPointLight[0].Range    = 10.0f;
+	mPointLight[0].Position = XMFLOAT3(0,15, 0);
 
 	mPointLight[1].Ambient = XMFLOAT4(.1f, .1f, .1f, 1);
 	mPointLight[1].Att     = XMFLOAT3(1.0f, .05f, .0075f);
 	mPointLight[1].Diffuse = XMFLOAT4(.0f, .6f, .0f, 1);
 	mPointLight[1].Specular = XMFLOAT4(1, 1, 1, 1);
-	mPointLight[1].Range    = 4.0f;
+	mPointLight[1].Range    = 6.0f;
 	mPointLight[1].Position = XMFLOAT3(0, 0, -3);
 }
 

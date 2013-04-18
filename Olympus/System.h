@@ -27,8 +27,8 @@
 #pragma comment (lib, "XInput.lib")
 
 // define the screen resolution
-#define SCREEN_WIDTH  320
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH  1240
+#define SCREEN_HEIGHT 720
 
 class System
 {
