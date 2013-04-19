@@ -1,0 +1,230 @@
+﻿Build started 4/18/2013 3:44:48 PM.
+     1>Project "Z:\Windows.Documents\Desktop\git\Olympus\Olympus\Olympus.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\Olympus.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D _ITERATOR_DEBUG_LEVEL=0 /D _MBCS /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt apex.cpp ApexParticles.cpp Camera.cpp FontSheet.cpp GameTimer.cpp GeometryGenerator.cpp GroundPlane.cpp Heightfield.cpp importer.cpp Main.cpp MathHelper.cpp Object.cpp OnScreen.cpp PhysXHeightField.cpp RenderManager.cpp ScreenQuad.cpp SkyBox.cpp System.cpp ZeusRenderResources.cpp ZeusRenderResourceManager.cpp ZeusResourceCallback.cpp
+         ZeusResourceCallback.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>ZeusResourceCallback.cpp(46): warning C4482: nonstandard extension used: enum 'NxParameterized::Serializer::SerializeType' used in qualified name
+         ZeusRenderResourceManager.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         ZeusRenderResources.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         System.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\SkyBox.h(39): warning C4265: 'SkyBox' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ScreenQuad.h(59): warning C4265: 'ScreenQuad' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>z:\windows.documents\desktop\git\olympus\olympus\Object.h(63): warning C4265: 'Object' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\GroundPlane.h(66): warning C4265: 'GroundPlane' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>System.cpp(590): warning C4244: '=' : conversion from 'int' to 'FLOAT', possible loss of data
+     1>System.cpp(591): warning C4244: '=' : conversion from 'int' to 'FLOAT', possible loss of data
+         SkyBox.cpp
+         ScreenQuad.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\SkyBox.h(39): warning C4265: 'SkyBox' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>z:\windows.documents\desktop\git\olympus\olympus\Object.h(63): warning C4265: 'Object' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\GroundPlane.h(66): warning C4265: 'GroundPlane' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         RenderManager.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\SkyBox.h(39): warning C4265: 'SkyBox' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ScreenQuad.h(59): warning C4265: 'ScreenQuad' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>z:\windows.documents\desktop\git\olympus\olympus\Object.h(63): warning C4265: 'Object' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\GroundPlane.h(66): warning C4265: 'GroundPlane' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>RenderManager.cpp(79): warning C4244: '=' : conversion from 'double' to 'LONG', possible loss of data
+     1>RenderManager.cpp(276): warning C4018: '<' : signed/unsigned mismatch
+         PhysXHeightField.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         OnScreen.cpp
+         Object.cpp
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\Object.h(63): warning C4265: 'Object' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>Object.cpp(71): warning C4018: '<' : signed/unsigned mismatch
+     1>Object.cpp(19): warning C4101: 'tempTexCount' : unreferenced local variable
+         MathHelper.cpp
+         Main.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\SkyBox.h(39): warning C4265: 'SkyBox' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ScreenQuad.h(59): warning C4265: 'ScreenQuad' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>z:\windows.documents\desktop\git\olympus\olympus\Object.h(63): warning C4265: 'Object' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\GroundPlane.h(66): warning C4265: 'GroundPlane' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         importer.cpp
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>importer.cpp(150): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(150): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(150): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(151): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(151): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(151): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(152): warning C4244: 'argument' : conversion from 'double' to 'FLOAT', possible loss of data
+     1>importer.cpp(152): warning C4244: 'argument' : conversion from 'fbxsdk_2013_3::FbxDouble' to 'FLOAT', possible loss of data
+     1>importer.cpp(175): warning C4018: '>' : signed/unsigned mismatch
+     1>importer.cpp(217): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         Heightfield.cpp
+     1>Heightfield.cpp(66): warning C4101: 'hr' : unreferenced local variable
+         GroundPlane.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\SkyBox.h(39): warning C4265: 'SkyBox' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ScreenQuad.h(59): warning C4265: 'ScreenQuad' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         IMPORTANT NOTE: The FBX SDK API changed substantially. Please define FBXSDK_NEW_API in your project and fix compilation errors as instructed in fbxsdk_compatibility.h.
+     1>z:\windows.documents\desktop\git\olympus\olympus\Object.h(63): warning C4265: 'Object' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>GroundPlane.cpp(98): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>GroundPlane.cpp(98): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         GeometryGenerator.cpp
+         GameTimer.cpp
+         FontSheet.cpp
+         Camera.cpp
+         ApexParticles.cpp
+         Generating Code...
+     1>z:\windows.documents\desktop\git\olympus\olympus\importer.cpp(302): warning C4715: 'GetTexCoords' : not all control paths return a value
+         Compiling...
+         apex.cpp
+     1>z:\windows.documents\desktop\git\olympus\olympus\Renderable.h(17): warning C4265: 'Renderable' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+     1>z:\windows.documents\desktop\git\olympus\olympus\ApexParticles.h(71): warning C4265: 'ApexParticles' : class has virtual functions, but destructor is not virtual
+                  instances of this class may not be destructed correctly
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /l"0x0409" /nologo /fo"Debug\ZeusIcon.res" Media\ZeusIcon.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\Windows.Documents\Desktop\git\Olympus\Debug\Olympus.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Olympus.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Z:\Windows.Documents\Desktop\git\Olympus\Debug\Olympus.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\Windows.Documents\Desktop\git\Olympus\Debug\Olympus.lib" /MACHINE:X86 Debug\ZeusIcon.res
+         Debug\apex.obj
+         Debug\ApexParticles.obj
+         Debug\Camera.obj
+         Debug\FontSheet.obj
+         Debug\GameTimer.obj
+         Debug\GeometryGenerator.obj
+         Debug\GroundPlane.obj
+         Debug\Heightfield.obj
+         Debug\importer.obj
+         Debug\Main.obj
+         Debug\MathHelper.obj
+         Debug\Object.obj
+         Debug\OnScreen.obj
+         Debug\PhysXHeightField.obj
+         Debug\RenderManager.obj
+         Debug\ScreenQuad.obj
+         Debug\SkyBox.obj
+         Debug\System.obj
+         Debug\ZeusRenderResources.obj
+         Debug\ZeusRenderResourceManager.obj
+         Debug\ZeusResourceCallback.obj
+     1>libcpmtd0.lib(xdebug.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdiplusShutdown@4 referenced in function "public: long __thiscall FontSheet::Initialize(struct ID3D11Device *,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> > const &,float,enum FontSheet::FontStyle,bool)" (?Initialize@FontSheet@@QAEJPAUID3D11Device@@ABV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@MW4FontStyle@1@_N@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdiplusStartup@12 referenced in function "public: long __thiscall FontSheet::Initialize(struct ID3D11Device *,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> > const &,float,enum FontSheet::FontStyle,bool)" (?Initialize@FontSheet@@QAEJPAUID3D11Device@@ABV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@MW4FontStyle@1@_N@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGetImageGraphicsContext@8 referenced in function "public: __thiscall Gdiplus::Graphics::Graphics(class Gdiplus::Image *)" (??0Graphics@Gdiplus@@QAE@PAVImage@1@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDeleteGraphics@4 referenced in function "public: __thiscall Gdiplus::Graphics::~Graphics(void)" (??1Graphics@Gdiplus@@QAE@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipSetCompositingMode@8 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::SetCompositingMode(enum Gdiplus::CompositingMode)" (?SetCompositingMode@Graphics@Gdiplus@@QAE?AW4Status@2@W4CompositingMode@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipSetTextRenderingHint@8 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::SetTextRenderingHint(enum Gdiplus::TextRenderingHint)" (?SetTextRenderingHint@Graphics@Gdiplus@@QAE?AW4Status@2@W4TextRenderingHint@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipSetPageUnit@8 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::SetPageUnit(enum Gdiplus::Unit)" (?SetPageUnit@Graphics@Gdiplus@@QAE?AW4Status@2@W4Unit@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGraphicsClear@8 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::Clear(class Gdiplus::Color const &)" (?Clear@Graphics@Gdiplus@@QAE?AW4Status@2@ABVColor@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipCreateFont@20 referenced in function "public: __thiscall Gdiplus::Font::Font(wchar_t const *,float,int,enum Gdiplus::Unit,class Gdiplus::FontCollection const *)" (??0Font@Gdiplus@@QAE@PB_WMHW4Unit@1@PBVFontCollection@1@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipCreateFontFamilyFromName@12 referenced in function "public: __thiscall Gdiplus::FontFamily::FontFamily(wchar_t const *,class Gdiplus::FontCollection const *)" (??0FontFamily@Gdiplus@@QAE@PB_WPBVFontCollection@1@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGetGenericFontFamilySansSerif@4 referenced in function "public: static class Gdiplus::FontFamily const * __cdecl Gdiplus::FontFamily::GenericSansSerif(void)" (?GenericSansSerif@FontFamily@Gdiplus@@SAPBV12@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDeleteFontFamily@4 referenced in function "public: __thiscall Gdiplus::FontFamily::~FontFamily(void)" (??1FontFamily@Gdiplus@@QAE@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDeleteFont@4 referenced in function "public: __thiscall Gdiplus::Font::~Font(void)" (??1Font@Gdiplus@@QAE@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDisposeImage@4 referenced in function "public: virtual __thiscall Gdiplus::Image::~Image(void)" (??1Image@Gdiplus@@UAE@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipFree@4 referenced in function "public: static void __cdecl Gdiplus::GdiplusBase::operator delete(void *)" (??3GdiplusBase@Gdiplus@@SAXPAX@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipCloneImage@8 referenced in function "public: virtual class Gdiplus::Image * __thiscall Gdiplus::Image::Clone(void)" (?Clone@Image@Gdiplus@@UAEPAV12@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipAlloc@4 referenced in function "public: static void * __cdecl Gdiplus::GdiplusBase::operator new(unsigned int)" (??2GdiplusBase@Gdiplus@@SAPAXI@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipCreateBitmapFromScan0@24 referenced in function "public: __thiscall Gdiplus::Bitmap::Bitmap(int,int,int)" (??0Bitmap@Gdiplus@@QAE@HHH@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipMeasureString@36 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::MeasureString(wchar_t const *,int,class Gdiplus::Font const *,class Gdiplus::PointF const &,class Gdiplus::RectF *)const " (?MeasureString@Graphics@Gdiplus@@QBE?AW4Status@2@PB_WHPBVFont@2@ABVPointF@2@PAVRectF@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipCreateSolidFill@8 referenced in function "public: __thiscall Gdiplus::SolidBrush::SolidBrush(class Gdiplus::Color const &)" (??0SolidBrush@Gdiplus@@QAE@ABVColor@1@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDeleteBrush@4 referenced in function "public: virtual __thiscall Gdiplus::Brush::~Brush(void)" (??1Brush@Gdiplus@@UAE@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipCloneBrush@8 referenced in function "public: virtual class Gdiplus::Brush * __thiscall Gdiplus::Brush::Clone(void)const " (?Clone@Brush@Gdiplus@@UBEPAV12@XZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDrawString@28 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::DrawString(wchar_t const *,int,class Gdiplus::Font const *,class Gdiplus::PointF const &,class Gdiplus::Brush const *)" (?DrawString@Graphics@Gdiplus@@QAE?AW4Status@2@PB_WHPBVFont@2@ABVPointF@2@PBVBrush@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipDrawImagePointRectI@36 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Graphics::DrawImage(class Gdiplus::Image *,int,int,int,int,int,int,enum Gdiplus::Unit)" (?DrawImage@Graphics@Gdiplus@@QAE?AW4Status@2@PAVImage@2@HHHHHHW4Unit@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipBitmapLockBits@20 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Bitmap::LockBits(class Gdiplus::Rect const *,unsigned int,int,class Gdiplus::BitmapData *)" (?LockBits@Bitmap@Gdiplus@@QAE?AW4Status@2@PBVRect@2@IHPAVBitmapData@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipBitmapUnlockBits@8 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Bitmap::UnlockBits(class Gdiplus::BitmapData *)" (?UnlockBits@Bitmap@Gdiplus@@QAE?AW4Status@2@PAVBitmapData@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGetImageWidth@8 referenced in function "public: unsigned int __thiscall Gdiplus::Image::GetWidth(void)" (?GetWidth@Image@Gdiplus@@QAEIXZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGetImageHeight@8 referenced in function "public: unsigned int __thiscall Gdiplus::Image::GetHeight(void)" (?GetHeight@Image@Gdiplus@@QAEIXZ)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipBitmapGetPixel@16 referenced in function "public: enum Gdiplus::Status __thiscall Gdiplus::Bitmap::GetPixel(int,int,class Gdiplus::Color *)" (?GetPixel@Bitmap@Gdiplus@@QAE?AW4Status@2@HHPAVColor@2@@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGetImageEncodersSize@8 referenced in function "enum Gdiplus::Status __cdecl Gdiplus::GetImageEncodersSize(unsigned int *,unsigned int *)" (?GetImageEncodersSize@Gdiplus@@YA?AW4Status@1@PAI0@Z)
+     1>FontSheet.obj : error LNK2019: unresolved external symbol _GdipGetImageEncoders@12 referenced in function "enum Gdiplus::Status __cdecl Gdiplus::GetImageEncoders(unsigned int,unsigned int,class Gdiplus::ImageCodecInfo *)" (?GetImageEncoders@Gdiplus@@YA?AW4Status@1@IIPAVImageCodecInfo@1@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: void __thiscall fbxsdk_2013_3::FbxObject::Destroy(bool)" (?Destroy@FbxObject@fbxsdk_2013_3@@QAEX_N@Z) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxString::~FbxString(void)" (??1FbxString@fbxsdk_2013_3@@QAE@XZ) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: char * __thiscall fbxsdk_2013_3::FbxString::Buffer(void)" (?Buffer@FbxString@fbxsdk_2013_3@@QAEPADXZ) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: bool __thiscall fbxsdk_2013_3::FbxImporter::Import(class fbxsdk_2013_3::FbxDocument *,bool)" (?Import@FbxImporter@fbxsdk_2013_3@@QAE_NPAVFbxDocument@2@_N@Z) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: static class fbxsdk_2013_3::FbxImporter * __cdecl fbxsdk_2013_3::FbxImporter::Create(class fbxsdk_2013_3::FbxManager *,char const *)" (?Create@FbxImporter@fbxsdk_2013_3@@SAPAV12@PAVFbxManager@2@PBD@Z) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: static class fbxsdk_2013_3::FbxScene * __cdecl fbxsdk_2013_3::FbxScene::Create(class fbxsdk_2013_3::FbxManager *,char const *)" (?Create@FbxScene@fbxsdk_2013_3@@SAPAV12@PAVFbxManager@2@PBD@Z) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: static class fbxsdk_2013_3::FbxIOSettings * __cdecl fbxsdk_2013_3::FbxIOSettings::Create(class fbxsdk_2013_3::FbxManager *,char const *)" (?Create@FbxIOSettings@fbxsdk_2013_3@@SAPAV12@PAVFbxManager@2@PBD@Z) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: static class fbxsdk_2013_3::FbxManager * __cdecl fbxsdk_2013_3::FbxManager::Create(void)" (?Create@FbxManager@fbxsdk_2013_3@@SAPAV12@XZ) referenced in function "void __cdecl LoadScene(char *)" (?LoadScene@@YAXPAD@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxNode * __thiscall fbxsdk_2013_3::FbxScene::GetRootNode(void)const " (?GetRootNode@FbxScene@fbxsdk_2013_3@@QBEPAVFbxNode@2@XZ) referenced in function "void __cdecl ProcessScene(void)" (?ProcessScene@@YAXXZ)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxNode * __thiscall fbxsdk_2013_3::FbxNode::GetChild(int)" (?GetChild@FbxNode@fbxsdk_2013_3@@QAEPAV12@H@Z) referenced in function "void __cdecl ProcessNode(class fbxsdk_2013_3::FbxNode *,int)" (?ProcessNode@@YAXPAVFbxNode@fbxsdk_2013_3@@H@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: int __thiscall fbxsdk_2013_3::FbxNode::GetChildCount(bool)const " (?GetChildCount@FbxNode@fbxsdk_2013_3@@QBEH_N@Z) referenced in function "void __cdecl ProcessNode(class fbxsdk_2013_3::FbxNode *,int)" (?ProcessNode@@YAXPAVFbxNode@fbxsdk_2013_3@@H@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxNodeAttribute * __thiscall fbxsdk_2013_3::FbxNode::GetNodeAttribute(void)" (?GetNodeAttribute@FbxNode@fbxsdk_2013_3@@QAEPAVFbxNodeAttribute@2@XZ) referenced in function "void __cdecl ProcessNode(class fbxsdk_2013_3::FbxNode *,int)" (?ProcessNode@@YAXPAVFbxNode@fbxsdk_2013_3@@H@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxLayerElementTangent * __thiscall fbxsdk_2013_3::FbxGeometryBase::GetElementTangent(int)" (?GetElementTangent@FbxGeometryBase@fbxsdk_2013_3@@QAEPAVFbxLayerElementTangent@2@H@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxLayerElementBinormal * __thiscall fbxsdk_2013_3::FbxGeometryBase::GetElementBinormal(int)" (?GetElementBinormal@FbxGeometryBase@fbxsdk_2013_3@@QAEPAVFbxLayerElementBinormal@2@H@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: bool __thiscall fbxsdk_2013_3::FbxMesh::GetPolygonVertexNormal(int,int,class fbxsdk_2013_3::FbxVector4 &)const " (?GetPolygonVertexNormal@FbxMesh@fbxsdk_2013_3@@QBE_NHHAAVFbxVector4@2@@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxVector4::FbxVector4(void)" (??0FbxVector4@fbxsdk_2013_3@@QAE@XZ) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxVector4::FbxVector4(class fbxsdk_2013_3::FbxVector4 const &)" (??0FbxVector4@fbxsdk_2013_3@@QAE@ABV01@@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxLayerElementMaterial * __thiscall fbxsdk_2013_3::FbxLayer::GetMaterials(void)" (?GetMaterials@FbxLayer@fbxsdk_2013_3@@QAEPAVFbxLayerElementMaterial@2@XZ) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxLayer * __thiscall fbxsdk_2013_3::FbxLayerContainer::GetLayer(int)" (?GetLayer@FbxLayerContainer@fbxsdk_2013_3@@QAEPAVFbxLayer@2@H@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: char const * __thiscall fbxsdk_2013_3::FbxObject::GetName(void)const " (?GetName@FbxObject@fbxsdk_2013_3@@QBEPBDXZ) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxMesh * __thiscall fbxsdk_2013_3::FbxNode::GetMesh(void)" (?GetMesh@FbxNode@fbxsdk_2013_3@@QAEPAVFbxMesh@2@XZ) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxGeometryConverter::~FbxGeometryConverter(void)" (??1FbxGeometryConverter@fbxsdk_2013_3@@QAE@XZ) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: bool __thiscall fbxsdk_2013_3::FbxGeometryConverter::TriangulateInPlace(class fbxsdk_2013_3::FbxNode *)" (?TriangulateInPlace@FbxGeometryConverter@fbxsdk_2013_3@@QAE_NPAVFbxNode@2@@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxGeometryConverter::FbxGeometryConverter(class fbxsdk_2013_3::FbxManager *)" (??0FbxGeometryConverter@fbxsdk_2013_3@@QAE@PAVFbxManager@1@@Z) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxManager * __thiscall fbxsdk_2013_3::FbxObject::GetFbxManager(void)const " (?GetFbxManager@FbxObject@fbxsdk_2013_3@@QBEPAVFbxManager@2@XZ) referenced in function "void __cdecl ProcessMesh(class fbxsdk_2013_3::FbxNode *)" (?ProcessMesh@@YAXPAVFbxNode@fbxsdk_2013_3@@@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxVector2::FbxVector2(void)" (??0FbxVector2@fbxsdk_2013_3@@QAE@XZ) referenced in function "class fbxsdk_2013_3::FbxVector2 __cdecl GetTexCoords(class fbxsdk_2013_3::FbxMesh *,int,int,int,int)" (?GetTexCoords@@YA?AVFbxVector2@fbxsdk_2013_3@@PAVFbxMesh@2@HHHH@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: int __thiscall fbxsdk_2013_3::FbxMesh::GetTextureUVIndex(int,int,enum fbxsdk_2013_3::FbxLayerElement::EType)" (?GetTextureUVIndex@FbxMesh@fbxsdk_2013_3@@QAEHHHW4EType@FbxLayerElement@2@@Z) referenced in function "class fbxsdk_2013_3::FbxVector2 __cdecl GetTexCoords(class fbxsdk_2013_3::FbxMesh *,int,int,int,int)" (?GetTexCoords@@YA?AVFbxVector2@fbxsdk_2013_3@@PAVFbxMesh@2@HHHH@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: int __thiscall fbxsdk_2013_3::FbxLayerElementArray::GetCount(void)const " (?GetCount@FbxLayerElementArray@fbxsdk_2013_3@@QBEHXZ) referenced in function "class fbxsdk_2013_3::FbxVector2 __cdecl GetTexCoords(class fbxsdk_2013_3::FbxMesh *,int,int,int,int)" (?GetTexCoords@@YA?AVFbxVector2@fbxsdk_2013_3@@PAVFbxMesh@2@HHHH@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: class fbxsdk_2013_3::FbxLayerElementUV * __thiscall fbxsdk_2013_3::FbxLayer::GetUVs(enum fbxsdk_2013_3::FbxLayerElement::EType)" (?GetUVs@FbxLayer@fbxsdk_2013_3@@QAEPAVFbxLayerElementUV@2@W4EType@FbxLayerElement@2@@Z) referenced in function "class fbxsdk_2013_3::FbxVector2 __cdecl GetTexCoords(class fbxsdk_2013_3::FbxMesh *,int,int,int,int)" (?GetTexCoords@@YA?AVFbxVector2@fbxsdk_2013_3@@PAVFbxMesh@2@HHHH@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: int __thiscall fbxsdk_2013_3::FbxLayerContainer::GetLayerCount(void)const " (?GetLayerCount@FbxLayerContainer@fbxsdk_2013_3@@QBEHXZ) referenced in function "class fbxsdk_2013_3::FbxVector2 __cdecl GetTexCoords(class fbxsdk_2013_3::FbxMesh *,int,int,int,int)" (?GetTexCoords@@YA?AVFbxVector2@fbxsdk_2013_3@@PAVFbxMesh@2@HHHH@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "void __cdecl fbxsdk_2013_3::FbxAssert(char const *,char const *,unsigned int,char const *)" (?FbxAssert@fbxsdk_2013_3@@YAXPBD0I0@Z) referenced in function "public: int & __thiscall fbxsdk_2013_3::FbxArray<int>::operator[](int)const " (??A?$FbxArray@H@fbxsdk_2013_3@@QBEAAHH@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: __thiscall fbxsdk_2013_3::FbxVector2::FbxVector2(class fbxsdk_2013_3::FbxVector2 const &)" (??0FbxVector2@fbxsdk_2013_3@@QAE@ABV01@@Z) referenced in function "public: class fbxsdk_2013_3::FbxVector2 __thiscall fbxsdk_2013_3::FbxLayerElementArrayTemplate<class fbxsdk_2013_3::FbxVector2>::GetAt(int)const " (?GetAt@?$FbxLayerElementArrayTemplate@VFbxVector2@fbxsdk_2013_3@@@fbxsdk_2013_3@@QBE?AVFbxVector2@2@H@Z)
+     1>importer.obj : error LNK2019: unresolved external symbol "public: bool __thiscall fbxsdk_2013_3::FbxLayerElementArray::GetAt(int,void * *,enum fbxsdk_2013_3::EFbxType)const " (?GetAt@FbxLayerElementArray@fbxsdk_2013_3@@QBE_NHPAPAXW4EFbxType@2@@Z) referenced in function "public: bool __thiscall fbxsdk_2013_3::FbxLayerElementArray::GetAt<int>(int,int *)const " (??$GetAt@H@FbxLayerElementArray@fbxsdk_2013_3@@QBE_NHPAH@Z)
+     1>Z:\Windows.Documents\Desktop\git\Olympus\Debug\Olympus.exe : fatal error LNK1120: 64 unresolved externals
+     1>Done Building Project "Z:\Windows.Documents\Desktop\git\Olympus\Olympus\Olympus.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:01:26.33

@@ -129,7 +129,7 @@ float4 PShader(GOut input) : SV_TARGET
 	float4 color = theTexture.Sample( samTriLinearSam, input.texcoord );///*float4(0.3f, 0.502f, 0.753f, 1.0f);*/theTexture.Gather(samTriLinearSam, input.texcoord, int2(0,0));
 	
 
-	for(int i = 0; i < 2; i++)
+	for(int i = 0; i < 1; i++)
 	{
 		ambient = dirLight[i].Ambient.xyz;
 
