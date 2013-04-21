@@ -465,6 +465,8 @@ void System::UpdateCamera(float dt)
 	if(GetAsyncKeyState('G') & 0x8000 )
 		  mFlyMode = false;
 
+	if(GetAsyncKeyState('R') & 0x8000 )
+		rendManager->RecompShaders();
 
 	if( GetAsyncKeyState('P') & 0x8000 ){ // Super Zoom
           mCam->SetLens(0.01f*MathHelper::Pi, (float)SCREEN_WIDTH/(float)SCREEN_HEIGHT, 1.0f, 1000.0f); 

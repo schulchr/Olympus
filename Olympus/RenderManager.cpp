@@ -95,7 +95,7 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	ZeroMemory(&bd, sizeof(bd));
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = 64;
+    bd.ByteWidth = sizeof(SceneBuff);
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     mDev->CreateBuffer(&bd, NULL, &sceneCBuffer);
@@ -303,4 +303,12 @@ void RenderManager::SetPosition(float x, float y, float z)
 void RenderManager::SetEmit(bool on)
 {
 	particles->SetEmit(on);
+}
+
+void RenderManager::RecompShaders()
+{
+	for(int i = 0; i < renderables.size() ; i++)
+	{
+		renderables[i]->RecompileShader();
+	}
 }

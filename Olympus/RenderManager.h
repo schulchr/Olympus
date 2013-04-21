@@ -81,6 +81,7 @@ public:
 	void RenderManager::SetPosition(float x, float y, float z);
 	void RenderManager::SetEmit(bool on);
 
+	void RecompShaders();
 	//void InitObjects();
 
 	IDXGISwapChain *mSwapchain;             // the pointer to the swap chain interface
