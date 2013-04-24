@@ -103,6 +103,7 @@ VOut VShader( Vin input )
 
 float4 PShader(VOut input) : SV_TARGET
 {
+
 	float3 lightVec;
 	float diffuseFactor;
 	float specFactor;
@@ -118,7 +119,7 @@ float4 PShader(VOut input) : SV_TARGET
 	
 
 	float3 normalColor  = normalTexture.Sample( samLinear, input.Tex ).rgb;
-
+	
 	//return float4(normalColor.xyz, 1.0f);
 
 	float3 bumpedNormalW = normalize(NormalSampleToWorldSpace(normalColor, input.NormalW, input.TangentW));
@@ -135,7 +136,7 @@ float4 PShader(VOut input) : SV_TARGET
 		ambient	+= saturate(dirLight[i].Ambient);
 
 		lightVec = -dirLight[i].Direction.xyz;
-
+		lightVec = normalize(lightVec);
 		diffuseFactor = dot(lightVec, bumpedNormalW);
 
 
@@ -152,10 +153,11 @@ float4 PShader(VOut input) : SV_TARGET
 	
 	}
 
-	float4 textureColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+	float4 textureColor = float4(1.0f,1.0f,0.0f,1.0f);//float4(0.0f, 0.0f, 0.0f, 1.0f);
 	textureColor = diffuseTexture.Sample( samLinear, input.Tex );
-
+	//return float4(textureColor.rgb,1.0f);
 	color = saturate(textureColor*(ambient + diffuse) + spec);
+	//clip(color.a < 0.999999f ? -1:1 );
 
 	color.a = 1.0;
 

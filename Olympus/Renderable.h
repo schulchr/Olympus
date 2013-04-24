@@ -12,7 +12,6 @@ class Renderable
 public:
 	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType) {}
 	virtual void RecompileShader() {}
-
 	
 	vector<ID3D11Buffer*> perCBuffers;
 };

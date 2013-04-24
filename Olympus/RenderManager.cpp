@@ -6,8 +6,9 @@ RenderManager::RenderManager(ID3D11DeviceContext *devcon,
 							 ID3D11Device *dev, 
 							 IDXGISwapChain *swapchain,
 							 Apex *apex,
-							 Camera *cam) :
-mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
+							 Camera *cam,
+							 D3D11_VIEWPORT *viewport) :
+mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mViewport(viewport)
 {
 	ID3D11Texture2D *pBackBuffer;
     swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -22,9 +23,9 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	
 	mSkyBox = new SkyBox(mDevcon, mDev, geoGen);
 	
-	ScreenQuad *sq = new ScreenQuad(mDevcon, mDev, geoGen);
+	//ScreenQuad *sq = new ScreenQuad(mDevcon, mDev, geoGen);
 
-	ApexParticles* emitter = apex->CreateEmitter(gRenderer);
+	emitter = apex->CreateEmitter(gRenderer);
 
 	particles = apex->CreateEmitter(gRenderer);
 		
@@ -35,20 +36,24 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	//renderables.push_back(sq);
 	
 
-    vector<LPSTR> textures;
-	vector<LPSTR> normalMap;
+ //   vector<LPSTR> textures;
+	//vector<LPSTR> normalMap;
 
-    textures.push_back( "Media/Textures/CommandoArmor_DM.dds" );
-	textures.push_back( "Media/Textures/Commando_DM.dds" );
-	normalMap.push_back( "Media/Textures/CommandoArmor_NM.dds" );
-	normalMap.push_back( "Media/Textures/Commando_NM.dds" );
+ //   textures.push_back( "Media/Textures/CommandoArmor_DM.dds" );
+	//textures.push_back( "Media/Textures/Commando_DM.dds" );
+	//normalMap.push_back( "Media/Textures/CommandoArmor_NM.dds" );
+	//normalMap.push_back( "Media/Textures/Commando_NM.dds" );
 
-	Object* obj = new Object();
-	obj->objLoad( "Media/Models/bigbadman.fbx", &textures, &normalMap, dev, devcon, apex);
+	//Object* obj = new Object();
+	//obj->objLoad( "Media/Models/bigbadman.fbx", &textures, &normalMap, dev, devcon, apex);
 
-    renderables.push_back(obj);
+ //   renderables.push_back(obj);
 
-	mGrid = new GroundPlane(mDevcon, mDev, geoGen, 200, 10);
+	Scene* scene = new Scene(&renderables, dev, devcon, apex);
+	
+	
+
+	mGrid = new GroundPlane(mDevcon, mDev, geoGen, 400, 10);
 	renderables.push_back(mGrid);
 
 	HRESULT hr;
@@ -83,12 +88,12 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 
 
 	mScreenCam = new Camera();
-	mScreenCam->SetLensOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1000.0f);
+    mScreenCam->SetLensOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1000.0f);
 	mScreenCam->UpdateViewMatrix();
 
 	free(geoGen);
 
-	//renderables.push_back(emitter);
+	renderables.push_back(emitter);
 	renderables.push_back(particles);
     
     D3D11_BUFFER_DESC bd;
@@ -100,7 +105,15 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 
     mDev->CreateBuffer(&bd, NULL, &sceneCBuffer);
 
-	
+
+
+	////CREATE POST PROCESS RTV
+	//ID3D11Texture2D* pBuffer;
+	//mSwapchain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&pBuffer );
+	//
+
+	//mDev->CreateRenderTargetView( pBuffer, NULL, &mPostProcessRTV );
+	//pBuffer->Release();
 
 
 	// create the depth buffer texture
@@ -192,7 +205,7 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 
     mDev->CreateBuffer(&bd, NULL, &dirLightCBuffer);
 	
-	mDirLight[0].Ambient =		XMFLOAT4(.55f, .55f, .55f, 1);
+	mDirLight[0].Ambient =		XMFLOAT4(.2f, .2f, .2f, 1);
 	mDirLight[0].Diffuse =		XMFLOAT4(.4f, .4f, .4f, 1);
 	//mDirLight[0].Direction =	XMFLOAT4(-0.57735f, -0.57735f, 0.57735f, 1.0);
 	mDirLight[0].Direction =	XMFLOAT4(0, 0, 5.0f, 1.0);
@@ -220,7 +233,7 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	mPointLight[0].Diffuse = XMFLOAT4(.6f, .0f, .0f, 1);
 	mPointLight[0].Specular = XMFLOAT4(1, 1, 1, 1);
 	mPointLight[0].Range    = 10.0f;
-	mPointLight[0].Position = XMFLOAT3(0,15, 0);
+	mPointLight[0].Position = XMFLOAT3(0, 15, 0);
 
 	mPointLight[1].Ambient = XMFLOAT4(.1f, .1f, .1f, 1);
 	mPointLight[1].Att     = XMFLOAT3(1.0f, .05f, .0075f);
@@ -228,6 +241,10 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex)
 	mPointLight[1].Specular = XMFLOAT4(1, 1, 1, 1);
 	mPointLight[1].Range    = 6.0f;
 	mPointLight[1].Position = XMFLOAT3(0, 0, -3);
+
+	mSphere = new Sphere(mDevcon, mDev, geoGen, apex, 4, 60, 60);
+	renderables.push_back(mSphere);
+	mSphere->SetupReflective(&renderables, mSkyBox, mScreen, mZbuffer, mViewport);
 }
 
 
@@ -238,11 +255,19 @@ void RenderManager::Render()
     mDevcon->ClearRenderTargetView(mBackbuffer, D3DXCOLOR(0.0f, 0.2f, 0.4f, 1.0f));
 	mDevcon->ClearRenderTargetView(mScreen->mTargetView, D3DXCOLOR(0.0f, 1.0f, 0.4f, 1.0f));
 	
+	particles->Update();
+	emitter->Update();
+	mDevcon->RSSetState(0);
+
+	//mSphere->getShit(/*mDynamicCubeMapSRVSphere*/mSkyBox->mCubeMap);
+
+
 	XMStoreFloat4x4(&sceneBuff.viewProj, mCam->ViewProj());
-
 	sceneBuff.camPos = mCam->GetPosition();
-
+	sceneBuff.pad = 1.0f;
 	mDevcon->VSSetConstantBuffers(0, 1, &sceneCBuffer);
+	mDevcon->PSSetConstantBuffers(0, 1, &sceneCBuffer);
+
 	mDevcon->UpdateSubresource(sceneCBuffer, 0, 0, &sceneBuff , 0, 0);
 
 	//Skybox right now doesn't like zbuffers, so dont' set one for it
@@ -280,6 +305,8 @@ void RenderManager::Render(int renderType)
 	}
 }
 
+
+
 void RenderManager::RenderToTarget(enum renderTargets target)
 {
 	switch(target)
@@ -307,6 +334,8 @@ void RenderManager::SetEmit(bool on)
 
 void RenderManager::RecompShaders()
 {
+	mScreen->RecompileShader();
+
 	for(int i = 0; i < renderables.size() ; i++)
 	{
 		renderables[i]->RecompileShader();

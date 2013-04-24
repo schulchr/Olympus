@@ -203,7 +203,7 @@ bool Apex::InitPhysX()
     return true;
 }
 
-void Apex::LoadTriangleMesh(int numVerts, PxVec3* verts, float scale)
+void Apex::LoadTriangleMesh(int numVerts, PxVec3* verts, ObjectInfo info)
 {
 	PxRigidStatic* meshActor = mPhysics->createRigidStatic(PxTransform::createIdentity());
 	PxShape* meshShape;
@@ -227,10 +227,10 @@ void Apex::LoadTriangleMesh(int numVerts, PxVec3* verts, float scale)
 
 			PxTriangleMeshGeometry triGeom;
 			triGeom.triangleMesh = mPhysics->createTriangleMesh(readBuffer);
-			triGeom.scale = PxMeshScale(PxVec3(scale,scale,scale),physx::PxQuat::createIdentity());
-
+			triGeom.scale = PxMeshScale(PxVec3(info.sx,info.sy,info.sz),physx::PxQuat::createIdentity());
+		
 			meshShape = meshActor->createShape(triGeom, *defaultMaterial);
-			meshShape->setLocalPose(PxTransform(PxVec3(0,0,0))); //x,y,z)));
+			meshShape->setLocalPose(PxTransform(PxVec3(info.x,info.y,info.z)));
 			meshShape->setFlag(PxShapeFlag::eUSE_SWEPT_BOUNDS, true);
 
 			mScene->addActor(*meshActor);
@@ -289,6 +289,38 @@ ApexParticles* Apex::CreateEmitter(physx::apex::NxUserRenderer* renderer)
 	ApexParticles* emitter = new ApexParticles();
 	emitter->CreateEmitter(gApexSDK, gApexScene, mDevcon, mDev, renderer, mIofxModule);
 	return emitter;
+}
+
+bool Apex::InitClothing()
+{
+  
+    //PX_ASSERT(gApexSDK);
+    //NxApexCreateError            errorCode;
+    //mApexClothingModule = static_cast<physx::apex::NxModuleClothing*>(gApexSDK->createModule("Clothing", &errorCode));
+
+    //if (mApexClothingModule != NULL)
+    //{
+    //    NxParameterized::Interface* moduleDesc = mApexClothingModule->getDefaultModuleDesc();
+
+    //    // Know what you're doing when playing with these values!
+
+    //    // should not be 0 for every platform except PC.
+    //    NxParameterized::setParamU32(*moduleDesc, "maxNumCompartments", 3);
+
+    //    // Can be tuned for switching between more memory and more spikes.
+    //    NxParameterized::setParamU32(*moduleDesc, "maxUnusedPhysXResources", 5);
+
+    //    mApexClothingModule->init(*moduleDesc);
+    //}
+
+    //physx::apex::NxApexAsset* asset = reinterpret_cast<physx::apex::NxApexAsset*>(gApexSDK->getNamedResourceProvider()->getResource(NX_CLOTHING_AUTHORING_TYPE_NAME, "curtain.mesh"));
+    //if( asset )
+    //{
+    //    gApexSDK->getNamedResourceProvider()->setResource(NX_CLOTHING_AUTHORING_TYPE_NAME, "c", asset, true);
+    //}
+
+
+    return true;
 }
 
 

@@ -1,9 +1,9 @@
-cbuffer ViewProjMat	: register(c0)
+cbuffer ViewProjMat	: register(b0)
 {
     float4x4 ViewProj;
 }
 
-cbuffer ObjectMat	: register(c1)
+cbuffer ObjectMat	: register(b1)
 {
 	float3	eyePos;
 	float buffer;
@@ -129,7 +129,7 @@ float4 PShader(GOut input) : SV_TARGET
 	float4 color = theTexture.Sample( samTriLinearSam, input.texcoord );///*float4(0.3f, 0.502f, 0.753f, 1.0f);*/theTexture.Gather(samTriLinearSam, input.texcoord, int2(0,0));
 	
 
-	for(int i = 0; i < 1; i++)
+	for(int i = 0; i < 2; i++)
 	{
 		ambient = dirLight[i].Ambient.xyz;
 
@@ -184,7 +184,7 @@ float4 PShader(GOut input) : SV_TARGET
 
 
 	color *= totalDiffuse + totalAmbient;///(5.0f-numLightsHit);
-	//color = saturate(color);
+	color = saturate(color);
 	color.a = theTexture.GatherAlpha(samTriLinearSam, input.texcoord, int2(0,0), int2(0,0), int2(0,0), int2(0,0));
 
 	clip(color.a < 0.999999f ? -1:1 );

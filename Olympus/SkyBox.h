@@ -20,9 +20,8 @@ public:
 	void CreateGeometry(GeometryGenerator *geoGen);
 	void SetupBuffer();
 	void SetupPipeline();
-	
-	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType);
 
+	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType);
 	//XMMatrix skyTrans;
 	ID3D11Buffer *skyBoxVertBuffer;               
 	ID3D11Buffer *skyBoxIndBuffer;

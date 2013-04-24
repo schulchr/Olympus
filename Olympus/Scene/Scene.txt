@@ -1,0 +1,4 @@
+# scene
+o Scene/archway.txt
+o Scene/bigbadman.txt
+o Scene/trees.txt

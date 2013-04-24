@@ -15,6 +15,8 @@
 //#include "NxApexSDK.h"
 #include "ZeusRenderResourceManager.h"
 #include "ApexParticles.h"
+#include "ApexCloth.h"
+//#include "Object.h"
 #include "ZeusResourceCallback.h"
 #include <d3d11.h>
 #include <d3dx11.h>
@@ -35,6 +37,16 @@ using namespace debugger;
 
 #pragma comment(lib ,"ApexFrameworkCHECKED_x86")
 
+#ifndef OBJECT_INFO
+#define OBJECT_INFO
+struct ObjectInfo
+{
+	float x,y,z;
+	float sx,sy,sz;
+	float rx, ry, rz;
+};
+#endif
+
 class Apex
 {
 	// APEX
@@ -44,6 +56,7 @@ public:
 
     bool Init(ID3D11Device* dev, ID3D11DeviceContext* devcon);
     bool InitParticles();
+    bool InitClothing();
 
 	ApexParticles* CreateEmitter(physx::apex::NxUserRenderer* renderer);
 
@@ -64,12 +77,16 @@ private:
     NxModuleEmitter*            mEmitterModule;
     NxModuleIofx*               mIofxModule;
 
+    ApexCloth*                  gApexCloth;
+
+    NxModuleClothing*           mApexClothingModule;
+
 	ID3D11Device* mDev;
 	ID3D11DeviceContext* mDevcon;
 	
 // PhysX
 public:
-	void LoadTriangleMesh(int numVerts, PxVec3* verts, float scale);
+	void LoadTriangleMesh(int numVerts, PxVec3* verts, ObjectInfo info);
 
 private:
     bool InitPhysX();

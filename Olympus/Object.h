@@ -15,11 +15,23 @@
 
 using namespace std;
 
+#ifndef OBJECT_INFO
+#define OBJECT_INFO
+struct ObjectInfo
+{
+	float x,y,z;
+	float sx,sy,sz;
+	float rx, ry, rz;
+};
+#endif
+
 class Object : public Renderable
 {
 public:
 	int numMeshes;
 	int alpha;
+
+	Apex* mApex;
 
 	ID3D11InputLayout* objLayout;
 	//ID3D11DeviceContext * devcon1;
@@ -36,13 +48,16 @@ public:
 
 	
 	ID3D11Buffer *worldCBuffer;
-	XMFLOAT4X4 mWorldMat[2];
+	XMFLOAT4X4 mWorldMat;
+	vector<XMFLOAT4X4> mWorldMats;
 
 	Object();
-	void objLoad( char* filename, vector<LPSTR > *textures, vector<LPSTR > *NormTextures, ID3D11Device* devv, ID3D11DeviceContext *devcon, Apex* apex );
+	void objLoad( char* filename, vector<LPCSTR > *textures, vector<LPCSTR > *NormTextures, ID3D11Device* devv, ID3D11DeviceContext *devcon, Apex* apex );
 	void renderO(ID3D11DeviceContext *devcon);
 	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType);
 	virtual void RecompileShader();
+
+	void AddInstance(ObjectInfo info);
 
 private:
 	HRESULT hr1;

@@ -19,7 +19,7 @@ System::System(HINSTANCE hInstance, int nCmdShow) :
     wc.lpfnWndProc  = WindowProc;
     wc.hInstance    = hInstance;
     wc.hIcon        = ::LoadIcon(hInstance, "ZeusIcon");
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hCursor		= LoadCursor(NULL, IDC_ARROW);
     wc.lpszClassName = "WindowClass";
 
     RegisterClassEx(&wc);
@@ -31,7 +31,7 @@ System::System(HINSTANCE hInstance, int nCmdShow) :
                           "WindowClass",
                           "Olympus Engine",
                           WS_OVERLAPPEDWINDOW,
-                          200,
+                          100,
                           100,
                           wr.right - wr.left,
                           wr.bottom - wr.top,
@@ -39,11 +39,11 @@ System::System(HINSTANCE hInstance, int nCmdShow) :
                           NULL,
                           hInstance,
                           NULL);
+
 	mAppPaused = false;
 	mMinimized = false;
 	mMaximized = false;
 	mResizing  = false;
-
 
     ShowWindow(hWnd, nCmdShow);
 
@@ -201,10 +201,27 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 			}
 			return 0;
+
+			// WM_EXITSIZEMOVE is sent when the user grabs the resize bars.
+			case WM_ENTERSIZEMOVE:
+				mAppPaused = true;
+				mResizing  = true;
+				mTimer.Stop();
+				return 0;
+
+			// WM_EXITSIZEMOVE is sent when the user releases the resize bars.
+			// Here we reset everything based on the new window dimensions.
+			case WM_EXITSIZEMOVE:
+				mAppPaused = false;
+				mResizing  = false;
+				mTimer.Start();
+				OnResize();
+				return 0;
     }
 
     return DefWindowProc (hWnd, message, wParam, lParam);
 }
+
 
 
 // this function initializes and prepares Direct3D for use
@@ -223,7 +240,7 @@ int System::initd3d()
     scd.BufferDesc.Height = SCREEN_HEIGHT;                 // set the back buffer height
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;     // how swap chain is to be used
     scd.OutputWindow = hWnd;                               // the window to be used
-    scd.SampleDesc.Count = 4;                              // how many multisamples
+    scd.SampleDesc.Count = 1;                              // how many multisamples
     scd.Windowed = TRUE;                                   // windowed/full-screen mode
     scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;    // allow full-screen switching
 	
@@ -245,17 +262,16 @@ int System::initd3d()
         return 0;
 
     // Set the viewport
-    D3D11_VIEWPORT viewport;
-    ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+    ZeroMemory(&mViewport, sizeof(D3D11_VIEWPORT));
 
-    viewport.TopLeftX = 0;
-    viewport.TopLeftY = 0;
-    viewport.Width = SCREEN_WIDTH;
-    viewport.Height = SCREEN_HEIGHT;
-	viewport.MaxDepth = 1;
-	viewport.MinDepth = 0;
+    mViewport.TopLeftX = 0;
+    mViewport.TopLeftY = 0;
+    mViewport.Width = SCREEN_WIDTH;
+    mViewport.Height = SCREEN_HEIGHT;
+	mViewport.MaxDepth = 1;
+	mViewport.MinDepth = 0;
 	
-    devcon->RSSetViewports(1, &viewport);
+    devcon->RSSetViewports(1, &mViewport);
 
     
 	// initialize camera
@@ -268,8 +284,9 @@ int System::initd3d()
     mApex = new Apex();
     mApex->Init(dev, devcon);
     mApex->InitParticles();
+    mApex->InitClothing();
 
-	rendManager = new RenderManager(devcon, dev, swapchain, mApex, mCam);
+	rendManager = new RenderManager(devcon, dev, swapchain, mApex, mCam, &mViewport);
     return InitPipeline();
 }
 
@@ -285,9 +302,9 @@ void System::RenderFrame(float dt)
 	timePassed += dt;
 	// Other animation?
 	float x,y,z;
-	x = 20.f * (float)sin((float)timePassed);
-	y = abs(20.f * (float)sin((float)timePassed/1.33f));
-	z = 20.f * (float)cos((float)timePassed);
+	x = 30.f * (float)sin((float)timePassed);
+	y = abs(30.f * (float)sin((float)timePassed/1.33f));
+	z = 30.f * (float)cos((float)timePassed);
 
 	rendManager->SetPosition(x,y,z);
 	UpdateCamera(dt);
@@ -345,7 +362,7 @@ void System::UpdateCamera(float dt)
     if( dwResult == ERROR_SUCCESS ){ // Controller is connected.
         float speed = 1.0f;
         if( state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB )
-            speed = 2.0f;
+            speed = 4.0f;
         
 		ShowCursor(false);
 
@@ -511,6 +528,7 @@ void System::OnMouseMove(WPARAM btnState, int x, int y)
 // END CAMERA STUFF
 //////////////////////////////////
 
+
 void System::OnResize()
 {
 	//Set the new aspect ration for the camera
@@ -570,7 +588,7 @@ void System::OnResize()
 
 	dev->CreateDepthStencilView(rendManager->mDepthTargetTexture, &dsvd, &rendManager->mZbuffer);
 
-
+	rendManager->mSphere->mZbuffer = rendManager->mZbuffer;
 	
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 
@@ -584,16 +602,16 @@ void System::OnResize()
 
 
 	// Set the viewport
-    D3D11_VIEWPORT viewport;
-    ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+    
+    ZeroMemory(&mViewport, sizeof(D3D11_VIEWPORT));
 
-    viewport.TopLeftX = 0;
-    viewport.TopLeftY = 0;
-    viewport.Width = mClientWidth;
-    viewport.Height = mClientHeight;
-	viewport.MaxDepth = 1;
-	viewport.MinDepth = 0;
+    mViewport.TopLeftX = 0;
+    mViewport.TopLeftY = 0;
+    mViewport.Width = mClientWidth;
+    mViewport.Height = mClientHeight;
+	mViewport.MaxDepth = 1;
+	mViewport.MinDepth = 0;
 	
-    devcon->RSSetViewports(1, &viewport);
+    devcon->RSSetViewports(1, &mViewport);
 }
  

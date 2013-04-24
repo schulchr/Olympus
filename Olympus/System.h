@@ -27,7 +27,7 @@
 #pragma comment (lib, "XInput.lib")
 
 // define the screen resolution
-#define SCREEN_WIDTH  1240
+#define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
 
 class System
@@ -56,14 +56,14 @@ public:
     void OnMouseUp(WPARAM btnState, int x, int y);
     void OnMouseMove(WPARAM btnState, int x, int y);
     void UpdateCamera(float dt);
-	void OnResize();
+    void OnResize();
 
 private:
     // global declarations
     IDXGISwapChain      *swapchain;         // the pointer to the swap chain interface
     ID3D11Device        *dev;               // the pointer to our Direct3D device interface
     ID3D11DeviceContext *devcon;            // the pointer to our Direct3D device context
-
+	D3D11_VIEWPORT mViewport;
 
 	bool				mFlyMode;
 	int					mFovFlag;
@@ -81,7 +81,7 @@ private:
 
     HRESULT             hr;                 // Error checking
 
-	int					mClientWidth;
+    int					mClientWidth;
 	int					mClientHeight;
 
 	bool				mAppPaused;
