@@ -18,6 +18,8 @@
 #include "FontSheet.h"
 #include "GroundPlane.h"
 #include "Sphere.h"
+#include "LightHelper.h"
+#include "ConstBuffers.h"
 
 using namespace std;
 
@@ -29,44 +31,6 @@ enum renderTargets
         depth
 	};
 
-#ifndef SCENEBUFF
-#define SCENEBUFF
-struct SceneBuff
-{
-	XMFLOAT4X4 viewProj;
-	XMFLOAT3   camPos;
-	float	   pad;
-};
-#endif
-
-struct DirectionalLight
-{
-	DirectionalLight() { ZeroMemory(this, sizeof(this)); }
-
-	XMFLOAT4 Ambient;
-	XMFLOAT4 Diffuse;
-	XMFLOAT4 Specular;
-	XMFLOAT4 Direction;
-	float  SpecPower;
-	XMFLOAT3 pad;
-};
-
-struct PointLight
-{
-	PointLight() { ZeroMemory(this, sizeof(this)); }
-
-	XMFLOAT4 Ambient;
-	XMFLOAT4 Diffuse;
-	XMFLOAT4 Specular;
-
-	// Packed into 4D vector: (Position, Range)
-	XMFLOAT3 Position;
-	float Range;
-
-	// Packed into 4D vector: (A0, A1, A2, Pad)
-	XMFLOAT3 Att;
-	float Pad; // Pad the last float so we can set an array of lights if we wanted.
-};
 
 namespace Colors
 {
@@ -127,6 +91,7 @@ public:
 	Camera *mScreenCam;
 	GroundPlane *mGrid;
 	Sphere *mSphere;
+	Sphere *mSphereMove;
 	
 	ID3D11Buffer *sceneCBuffer;
 	ID3D11Buffer *dirLightCBuffer;

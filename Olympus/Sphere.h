@@ -11,35 +11,8 @@
 #include "Vertices.h"
 #include "Renderable.h"
 #include "apex.h"
+#include "ConstBuffers.h"
 
-struct cbuffs
-{
-	D3DXMATRIX viewInvProj;
-	D3DXMATRIX viewPrevProj;
-
-	float nearZ;
-	float farZ;
-	float padding;
-	float pad;
-};
-
-#ifndef SCENEBUFF
-#define SCENEBUFF
-struct SceneBuff
-{
-	XMFLOAT4X4 viewProj;
-	XMFLOAT3   camPos;
-	float	   pad;
-};
-#endif
-
-struct EnvironBuff
-{
-    XMFLOAT4X4 ViewProj;
-	XMFLOAT3 cameraPos;
-	XMFLOAT3 eyePos;
-	XMFLOAT2 padding;
-};
 
 
 class Sphere : public Renderable
@@ -53,6 +26,7 @@ public:
 	void SetupBuffer();
 	void SetupPipeline();
 	void SetupRenderTarget();
+	void MoveTo(float x, float y, float z);
 
 	void SetupReflective(vector<Renderable*> *renderables, Renderable *skyBox,
 						ScreenQuad *screenQuad, ID3D11DepthStencilView *zbuff,

@@ -1,4 +1,4 @@
-﻿Build started 4/18/2013 9:08:46 PM.
+﻿Build started 4/25/2013 1:56:29 AM.
      1>Project "Z:\Windows.Documents\Desktop\git\Olympus\Olympus\Olympus.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Checked\Olympus.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -9,6 +9,7 @@
        Link:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\Windows.Documents\Desktop\git\Olympus\Checked\Olympus.exe" /NOLOGO gdiplus.lib "fbxsdk-2013.3d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcmt.lib /MANIFEST /ManifestFile:"Checked\Olympus.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Z:\Windows.Documents\Desktop\git\Olympus\Checked\Olympus.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\Windows.Documents\Desktop\git\Olympus\Checked\Olympus.lib" /MACHINE:X86 Checked\ZeusIcon.res
          Checked\apex.obj
+         Checked\ApexCloth.obj
          Checked\ApexParticles.obj
          Checked\Camera.obj
          Checked\FontSheet.obj
@@ -23,8 +24,10 @@
          Checked\OnScreen.obj
          Checked\PhysXHeightField.obj
          Checked\RenderManager.obj
+         Checked\Scene.obj
          Checked\ScreenQuad.obj
          Checked\SkyBox.obj
+         Checked\Sphere.obj
          Checked\System.obj
          Checked\ZeusRenderResources.obj
          Checked\ZeusRenderResourceManager.obj
@@ -66,4 +69,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.46
+Time Elapsed 00:00:05.77

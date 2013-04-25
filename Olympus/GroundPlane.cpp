@@ -9,9 +9,7 @@ GroundPlane::GroundPlane()
 GroundPlane::GroundPlane(ID3D11DeviceContext *mDevcon, ID3D11Device *mDev, GeometryGenerator *geoGen, int planeSize, int increment) : 
 	mDevcon(mDevcon), mDev(mDev), size(planeSize), inc(increment)
 {
-	cb = new cbuff();
-	cb->viewInvProj;
-	cb->viewPrevProj;
+	cb = new cbuffs();
 
 	CreateGeometry(geoGen);
 	SetupBuffer();
@@ -167,15 +165,8 @@ void GroundPlane::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
     mDevcon->IASetInputLayout(mLayout);
 
 
-	cb->farZ = mCam->GetFarZ();
-	cb->nearZ = mCam->GetNearZ();
 
-	XMStoreFloat4x4( &cb->viewInvProj, mCam->ViewProj() );
-	//XMStoreFloat4x4(&cb->viewInvProj, XMMatrixInverse( &XMMatrixDeterminant( XMLoadFloat4x4( &cb->viewInvProj ) ), XMLoadFloat4x4( &cb->viewInvProj ) ) );
-
-//	XMStoreFloat4x4( &cb->viewInvProj, XMMatrixTranspose( XMLoadFloat4x4( &cb->viewInvProj ) ) );
-//	XMStoreFloat4x4( &cb->viewPrevProj, XMMatrixTranspose( XMLoadFloat4x4( &cb->viewPrevProj ) ) );
-
+	
 	 // select which vertex buffer to display
     UINT stride = sizeof(PosNormalTexTan);
     UINT offset = 0;
@@ -200,6 +191,4 @@ void GroundPlane::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
 
 	 // draw the vertex buffer to the back buffer
     mDevcon->DrawIndexed(indices.size(), 0, 0);
-
-	XMStoreFloat4x4( &cb->viewPrevProj, mCam->ViewProj() );
 }

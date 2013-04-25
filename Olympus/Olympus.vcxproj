@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GroundPlane.hlsl" />
+    <None Include="LightHelper.hlsl" />
     <None Include="models.hlsl" />
     <None Include="OnScreen.hlsl" />
     <None Include="ScreenQuad.hlsl" />
@@ -147,6 +148,7 @@
     <ClInclude Include="apex.h" />
     <ClInclude Include="ApexCloth.h" />
     <ClInclude Include="ApexParticles.h" />
+    <ClInclude Include="ConstBuffers.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FontSheet.h" />
     <ClInclude Include="GameTimer.h" />
@@ -154,6 +156,7 @@
     <ClInclude Include="GroundPlane.h" />
     <ClInclude Include="Heightfield.h" />
     <ClInclude Include="importer.h" />
+    <ClInclude Include="LightHelper.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OnScreen.h" />

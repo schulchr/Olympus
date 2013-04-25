@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "Vertices.h"
 #include "Renderable.h"
-
+#include "ConstBuffers.h"
 
 
 class GroundPlane : public Renderable
@@ -25,17 +25,6 @@ public:
 	void SetupRenderTarget();
 	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType);
 	
-	struct cbuff
-{
-	XMFLOAT4X4 viewInvProj;
-	XMFLOAT4X4 viewPrevProj;
-
-	float nearZ;
-	float farZ;
-	float padding;
-	float pad;
-};
-
 
 	ID3D11Buffer *GroundPlaneVertBuffer;               
 	ID3D11Buffer *GroundPlaneIndBuffer;
@@ -58,7 +47,7 @@ public:
 	ID3D11RenderTargetView* mTargetView;
 	ID3D11ShaderResourceView* mShaderResourceView;
 
-	struct cbuff *cb;
+	struct cbuffs *cb;
 
 	int size;
 	int inc;
