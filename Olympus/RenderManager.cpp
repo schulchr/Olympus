@@ -1,6 +1,6 @@
 #include "RenderManager.h"
 #include "GeometryGenerator.h"
-#include "System.h"
+
 
 RenderManager::RenderManager(ID3D11DeviceContext *devcon, 
 							 ID3D11Device *dev, 
@@ -10,6 +10,10 @@ RenderManager::RenderManager(ID3D11DeviceContext *devcon,
 							 D3D11_VIEWPORT *viewport) :
 mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mViewport(viewport)
 {
+	fps = 0;
+	SCREEN_WIDTH = 1280;
+	SCREEN_HEIGHT = 720;
+
 	ID3D11Texture2D *pBackBuffer;
     swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
@@ -23,14 +27,26 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 	
 	mSkyBox = new SkyBox(mDevcon, mDev, geoGen);
 	
-	//ScreenQuad *sq = new ScreenQuad(mDevcon, mDev, geoGen);
+    //ApexCloth* cloth = apex->CreateCloth(gRenderer, "ctdm_Cape_400");
 
-	emitter = apex->CreateEmitter(gRenderer);
-	//emitter->SetPosition(-3.0f,309.5,-957.3);
+	//ScreenQuad *sq = new ScreenQuad(mDevcon, mDev, geoGen);
+    emitter = apex->CreateEmitter(gRenderer, "SmokeEmitter");
+	emitter->SetPosition(-18.0f, -65.0f, -243.0f);
 	//emitter->SetEmit(true);
 
-	particles = apex->CreateEmitter(gRenderer);
-		
+    sphere2 = new Sphere(mDevcon, mDev, geoGen, apex, 2, 30, 30);
+	renderables.push_back(sphere2);
+	sphere2->MoveTo(-18.0f, -65.0f, -243.0f);//-3.0f, 309.5f, -957.3f);
+    
+
+	particles = apex->CreateEmitter(gRenderer, "testSpriteEmitter4ParticleFluidIos");
+    particles->SetPosition(-19.0f, 45.0f, 206.0f);
+
+    mSphereMove = new Sphere(mDevcon, mDev, geoGen, apex, 2, 30, 30);
+	renderables.push_back(mSphereMove);
+	mSphereMove->MoveTo(-19.0f, 45.0f, 206.0f);
+
+	
 	//Special "renderable" case, do not add to the vector
 	mScreen = new ScreenQuad(mDevcon, mDev, geoGen);
 	//Special camera, doesn't move
@@ -53,38 +69,24 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 
 	Scene* scene = new Scene(&renderables, dev, devcon, apex);
 	
-	
+	projectile = new Projectile(dev, devcon, apex);
+	renderables.push_back(projectile);
 
 	mGrid = new GroundPlane(mDevcon, mDev, geoGen, 400, 10);
 	//renderables.push_back(mGrid);
+
+	
+	
 
 	HRESULT hr;
 
 	//mFont;// = new FontSheet();
 	//mText;//  = OnScreen();
 
-	hr = mFont.Initialize(mDev, L"Times New Roman", 30.0f, FontSheet::FontStyleRegular, false);
+	hr = mFont.Initialize(mDev, L"Times New Roman", 30.0f, FontSheet::FontStyleRegular, true);
 	hr = mText.Initialize(mDev);
 
-	sText = L"Dragon Slayer";
 
-	// Calculate the text width.
-	int textWidth = 0;
-	for(UINT i = 0; i < sText.size(); ++i)
-	{
-		WCHAR character = sText[i];
-		if(character == ' ') 
-		{
-			textWidth += mFont.GetSpaceWidth();
-		}
-		else{
-			const CD3D11_RECT& r = mFont.GetCharRect(sText[i]);
-			textWidth += (r.right - r.left + 1);
-		}
-	}
-
-        textPos.x = (SCREEN_WIDTH - textWidth) - 2.0;
-        textPos.y = 0;//SCREEN_HEIGHT;
 
 	//hr = D3DX11CreateShaderResourceViewFromFile(dev, "Textures/WoodCrate01.dds", 0, 0, &mImageSRV, 0 );
 
@@ -95,8 +97,7 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 
 	free(geoGen);
 
-	renderables.push_back(emitter);
-	renderables.push_back(particles);
+	
     
     D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -138,6 +139,23 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 
 	hr = dev->CreateRasterizerState (&raster, &pState);
 	devcon->RSSetState( pState );
+
+	D3D11_SAMPLER_DESC sd;
+    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sd.MaxAnisotropy = 16;
+    sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    sd.BorderColor[0] = 0.0f;
+    sd.BorderColor[1] = 0.0f;
+    sd.BorderColor[2] = 0.0f;
+    sd.BorderColor[3] = 0.0f;
+    sd.MinLOD = 0.0f;
+    sd.MaxLOD = FLT_MAX;
+    sd.MipLODBias = 0.0f;
+
+	dev->CreateSamplerState(&sd, &mSampState);
+	devcon->PSSetSamplers(0, 1, &mSampState);
 
 	D3D11_TEXTURE2D_DESC texd;
 	ZeroMemory(&texd, sizeof(texd));
@@ -210,7 +228,7 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 	mDirLight[0].Ambient =		XMFLOAT4(.2f, .2f, .2f, 1);
 	mDirLight[0].Diffuse =		XMFLOAT4(.4f, .4f, .4f, 1);
 	mDirLight[0].Direction =	XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
-	mDirLight[0].Specular =		XMFLOAT4(0.8f, 0.8f, 0.7f, 10.0f);
+	mDirLight[0].Specular =		XMFLOAT4(0.8f, 0.8f, 0.7f, 1);
 
 	mDirLight[1].Ambient =		XMFLOAT4(.3f, .3f, .3f, 1);
 	mDirLight[1].Diffuse =		XMFLOAT4(.6f, .6f, .6f, 1);
@@ -245,37 +263,126 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 	renderables.push_back(mSphere);
 	mSphere->SetupReflective(&renderables, mSkyBox, mScreen, mZbuffer, mViewport);
 
-	mSphereMove = new Sphere(mDevcon, mDev, geoGen, apex, 2, 30, 30);
-	renderables.push_back(mSphereMove);
-	mSphereMove->MoveTo(0,0,0);
-
-
-	ID3D11SamplerState *pSS;
-
-	
-	D3D11_SAMPLER_DESC sd;
-    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sd.MaxAnisotropy = 16;
-    sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    //sd.BorderColor[0] = 0.0f;
-    //sd.BorderColor[1] = 0.0f;
-    //sd.BorderColor[2] = 0.0f;
-    //sd.BorderColor[3] = 0.0f;
-    sd.MinLOD = 0.0f;
-    sd.MaxLOD = FLT_MAX;
-    sd.MipLODBias = 0.0f;
-
-    dev->CreateSamplerState(&sd, &pSS);    // create the default sampler
-
-    devcon->PSSetSamplers( 0, 1, &pSS );
+	renderables.push_back(emitter);
+	renderables.push_back(particles);
 }
 
 
+void RenderManager::fpsCalc(GameTimer mTimer)
+{
+	static int frameCnt = 0;
+	static float timeElapsed = 0.0f;
+
+	frameCnt++;
+
+	// Compute averages over one second period.
+	if( (mTimer.TotalTime() - timeElapsed) >= 1.0f )
+	{
+		fps = (int)frameCnt; // fps = frameCnt / 1
+		mspf = 1000.0f / fps;
+
+			// Reset for next average.
+		frameCnt = 0;
+		timeElapsed += 1.0f;
+	}
+}
+
+
+float timePassed = 0.0f;
+void RenderManager::Update(float dt)
+{
+	timePassed += dt;
+	// Other animation?
+	float x,y,z;
+	x = 200.0f * (float)sin((float)timePassed);
+	y = abs(50.f * (float)sin((float)timePassed/0.3f))-10.0f;
+	z = 200.0f * (float)cos((float)timePassed);
+
+	//SetPosition(x,y,z);
+	//mSphereMove->MoveTo(x,y,z);
+	projectile->Update();
+}
+
+void RenderManager::GetScreenParams(int mClientWidth, int mClientHeight)
+{
+	SCREEN_WIDTH = mClientWidth;
+	SCREEN_HEIGHT = mClientHeight;
+}
+
 void RenderManager::Render()
 {
-	
+	char buf[50];
+	itoa(fps, buf, 10);
+	sText = std::string("FPS: ") + buf;
+	std::string hair = "+";
+
+	// Convert the pos to a w string
+    std::string xs,ys,zs;
+        std::stringstream posx,posy,posz;
+        posx << mCam->GetPosition().x;
+        xs = posx.str();
+        posy << mCam->GetPosition().y;
+        ys = posy.str();
+        posz << mCam->GetPosition().z;
+        zs = posz.str();
+    std::string pos = xs + ", " + ys + ", " + zs;
+
+	// Calculate the text width.
+	int textWidth = 0;
+	for(UINT i = 0; i < sText.length(); ++i)
+	{
+		WCHAR character = sText[i];
+		if(character == ' ') 
+		{
+			textWidth += mFont.GetSpaceWidth();
+		}
+		else{
+			const CD3D11_RECT& r = mFont.GetCharRect(sText[i]);
+			textWidth += (r.right - r.left + 1);
+		}
+	}
+	        
+	// Calculate the hair width.
+    int hairWidth = 0;
+    for(UINT i = 0; i < hair.size(); ++i)
+    {
+        WCHAR character = hair[i];
+        if(character == ' ') 
+        {
+            hairWidth += mFont.GetSpaceWidth();
+        }
+        else{
+            const CD3D11_RECT& r = mFont.GetCharRect(hair[i]);
+            hairWidth += (r.right - r.left);
+        }
+    }
+
+   // Calculate the pos width
+    int posWidth = 0;
+    for(UINT i = 0; i < pos.size(); ++i)
+    {
+        WCHAR character = pos[i];
+        if(character == ' ') 
+        {
+            hairWidth += mFont.GetSpaceWidth();
+        }
+        else{
+            const CD3D11_RECT& r = mFont.GetCharRect(pos[i]);
+            posWidth += (r.right - r.left + 1);
+        }
+    }
+
+
+    textPos.x = (SCREEN_WIDTH - textWidth) - 2.0;
+    textPos.y = 0;//SCREEN_HEIGHT;
+
+	hairPos.x = (SCREEN_WIDTH - hairWidth) / 2;
+    hairPos.y = (SCREEN_HEIGHT - mFont.GetCharHeight()) / 2 ;
+
+	posPos.x = 2.0;
+	posPos.y = 1.0;
+
+
 	// clear the back buffer to a deep blue
 	mDevcon->ClearDepthStencilView(mZbuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     mDevcon->ClearRenderTargetView(mBackbuffer, D3DXCOLOR(0.0f, 0.2f, 0.4f, 1.0f));
@@ -284,9 +391,6 @@ void RenderManager::Render()
 	particles->Update();
 	emitter->Update();
 	mDevcon->RSSetState(0);
-
-	//mSphere->getShit(/*mDynamicCubeMapSRVSphere*/mSkyBox->mCubeMap);
-
 
 	XMStoreFloat4x4(&sceneBuff.viewProj, mCam->ViewProj());
 	sceneBuff.camPos = mCam->GetPosition();
@@ -321,6 +425,17 @@ void RenderManager::Render()
 	mScreen->Render(sceneCBuffer, mScreenCam, 0);
 
 	mText.DrawString(mDevcon, mFont, sText, textPos, XMCOLOR(0xffffffff));
+	mText.DrawString(mDevcon, mFont, hair, hairPos, XMCOLOR(0xffffffff));
+	mText.DrawString(mDevcon, mFont, pos, posPos, XMCOLOR(0xffffffff));
+
+	if(!((mCam->GetPosition().x > 15.0f || mCam->GetPosition().x < -25.0) ||
+         (mCam->GetPosition().y > 25.0f || mCam->GetPosition().y < -25.0) ||
+         (mCam->GetPosition().z > 15.0f || mCam->GetPosition().z < -25.0)) ){
+		mSphere->IsItReflective(true);
+	}
+	else{
+		mSphere->IsItReflective(false);
+	}
 }
 
 void RenderManager::Render(int renderType)
@@ -350,14 +465,14 @@ void RenderManager::RenderToTarget(enum renderTargets target)
 //DEBUG
 void RenderManager::SetPosition(float x, float y, float z)
 {
-	particles->SetPosition(x,y,z);
-	emitter->SetPosition(-3.0f, 309.5f, -957.3);
+	//particles->SetPosition(x,y,z);
+	//emitter->SetPosition(-3.0f, 309.5f, -957.3);
 }
 
 void RenderManager::SetEmit(bool on)
 {
 	particles->SetEmit(on);
-
+    emitter->SetEmit(on);
 }
 
 void RenderManager::RecompShaders()

@@ -18,18 +18,19 @@
 #include "FontSheet.h"
 #include "GroundPlane.h"
 #include "Sphere.h"
-#include "LightHelper.h"
+#include "Projectile.h"
+#include "GameTimer.h"
 #include "ConstBuffers.h"
-
+#include "LightHelper.h"
 using namespace std;
 
 enum renderTargets
-	{
-		backbuffer,
-		postprocess,
-		environment,
-        depth
-	};
+{
+	backbuffer,
+	postprocess,
+	environment,
+    depth
+};
 
 
 namespace Colors
@@ -51,6 +52,11 @@ class RenderManager
 {
 public:
 	
+	int fps;
+	float mspf;
+	int SCREEN_WIDTH;
+	int SCREEN_HEIGHT;
+
 
 	RenderManager(ID3D11DeviceContext *devcon, 
 				  ID3D11Device *dev, 
@@ -59,7 +65,10 @@ public:
 				  Camera *cam,
 				  D3D11_VIEWPORT *viewport);
 
-	
+	void fpsCalc(GameTimer mTimer);
+	void GetScreenParams(int mClientWidth, int mClientHeight);
+	void Update(float dt);
+
 	void Render(int renderType);
 	void Render();
 	void RenderToTarget(enum renderTargets);
@@ -86,12 +95,14 @@ public:
 	ID3D11RenderTargetView *mBackbuffer;    // the pointer to our back buffer
 
 	ID3D11BlendState* mBlendState;   // Our blend state
+	ID3D11SamplerState *mSampState;
 
 	Camera *mCam;
 	Camera *mScreenCam;
 	GroundPlane *mGrid;
 	Sphere *mSphere;
 	Sphere *mSphereMove;
+	Sphere *sphere2;
 	
 	ID3D11Buffer *sceneCBuffer;
 	ID3D11Buffer *dirLightCBuffer;
@@ -99,6 +110,7 @@ public:
 
 	SkyBox *mSkyBox;
 	ScreenQuad *mScreen;
+	Projectile *projectile;
 
 	ApexParticles* particles;
 	ApexParticles* emitter;
@@ -116,7 +128,9 @@ public:
 	FontSheet mFont;
 	OnScreen mText;
 	POINT textPos;
-	wstring sText;
+	POINT hairPos;
+	POINT posPos;
+	string sText;
 };
 
 

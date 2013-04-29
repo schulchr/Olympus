@@ -92,6 +92,7 @@ void Sphere::SetupPipeline()
 
     mDev->CreateInputLayout(ied, 4, VS->GetBufferPointer(), VS->GetBufferSize(), &mLayout);
    
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(mDev, "Media/Textures/mountains1024.dds", 0, 0, &mDynamicCubeMapSRVSphere, 0 );
 }
 
 void Sphere::CreateGeometry(GeometryGenerator *geoGen)
@@ -304,11 +305,11 @@ void Sphere::BuildDynamicCubeMapViewsSphere()
     mCubeMapViewport.MaxDepth = 1.0f;
 }
 
-void Sphere::DynamicCubeMapRender(int renderType, Camera cam)
+void Sphere::DynamicCubeMapRender(ID3D11Buffer *sceneBuff, int renderType, Camera cam)
 {
 	for(int i = 0; i < mRenderables->size() ; i++)
 	{
-		mRenderables[0][i]->Render(NULL, &cam, renderTargets::environment);
+		mRenderables[0][i]->Render(sceneBuff, &cam, renderTargets::environment);
 	}
 }
 
@@ -331,7 +332,7 @@ void Sphere::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
 			mDevcon->ClearDepthStencilView(mDynamicCubeMapDSVSphere, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 			// Bind cube map face as render target.
-			mDevcon->OMSetRenderTargets(1, &mDynamicCubeMapRTVSphere[i], mDynamicCubeMapDSVSphere);
+			mDevcon->OMSetRenderTargets(1, &mDynamicCubeMapRTVSphere[i], 0);
 
 			XMStoreFloat4x4(&sphereBuff.viewProj, mCubeMapCamera[i].ViewProj());
 			sphereBuff.camPos = mCubeMapCamera[i].GetPosition();
@@ -341,7 +342,11 @@ void Sphere::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
 			// Draw the scene with the exception of the center sphere to this cube map face
 			mSkyBox->Render(sceneBuff, &mCubeMapCamera[i], 0);
 	
-			DynamicCubeMapRender(0, mCubeMapCamera[i]);
+
+			// Bind cube map face as render target.
+			mDevcon->OMSetRenderTargets(1, &mDynamicCubeMapRTVSphere[i], mDynamicCubeMapDSVSphere);
+
+			DynamicCubeMapRender(sceneBuff, 0, mCubeMapCamera[i]);
 		}
 		mDevcon->GenerateMips(mDynamicCubeMapSRVSphere);
 
@@ -385,9 +390,9 @@ void Sphere::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
 		sphereBuff.camPos = mCam->GetPosition();
 		sphereBuff.pad = 1.0f;
 		mDevcon->UpdateSubresource(sceneBuff, 0, 0, &sphereBuff, 0, 0);
-
-		mDevcon->PSSetShaderResources(0, 1, &mDynamicCubeMapSRVSphere);
 	}
+		mDevcon->PSSetShaderResources(0, 1, &mDynamicCubeMapSRVSphere);
+	
 	// else texture?
 
 	//mDevcon->PSSetShaderResources(0, 1, &mShaderResourceView);
@@ -422,4 +427,9 @@ void Sphere::MoveTo(float x, float y, float z)
 	mX = x;
 	mY = y;
 	mZ = z;
+}
+
+void Sphere::IsItReflective(bool isReflective)
+{
+	reflective = isReflective;
 }

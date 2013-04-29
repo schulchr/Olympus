@@ -13,8 +13,6 @@
 #include "apex.h"
 #include "ConstBuffers.h"
 
-
-
 class Sphere : public Renderable
 {
 public:
@@ -34,11 +32,12 @@ public:
 	void BuildCubeFaceCamera(float x, float y, float z);
 	void BuildDynamicCubeMapViewsSphere();
 	bool reflective;
-	void DynamicCubeMapRender(int renderType, Camera mCubeMapCamera);
+	void DynamicCubeMapRender(ID3D11Buffer *sceneBuff, int renderType, Camera mCubeMapCamera);
 
 	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType);
 	virtual void RecompileShader();
-	
+	void IsItReflective(bool isReflective);
+
 	ID3D11Buffer *SphereVertBuffer;               
 	ID3D11Buffer *SphereIndBuffer;
 	ID3D11Buffer *envCBuffer;

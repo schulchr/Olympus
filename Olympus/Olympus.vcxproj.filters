@@ -98,6 +98,9 @@
     <Filter Include="Rendering\Objects\Sphere">
       <UniqueIdentifier>{1fb2f87d-4323-48e9-90b3-ace34f856a58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Objects\Projectiles">
+      <UniqueIdentifier>{860c1009-e313-465f-9f82-ff095ab77d19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="apex.cpp">
@@ -170,6 +173,9 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Rendering\Objects\Sphere</Filter>
     </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Rendering\Objects\Projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders.hlsl">
@@ -196,9 +202,7 @@
     <None Include="Sphere.hlsl">
       <Filter>Rendering\Objects\Sphere</Filter>
     </None>
-    <None Include="LightHelper.hlsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
+    <None Include="LightHelper.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="apex.h">
@@ -282,12 +286,11 @@
     <ClInclude Include="Sphere.h">
       <Filter>Rendering\Objects\Sphere</Filter>
     </ClInclude>
-    <ClInclude Include="LightHelper.h">
-      <Filter>Rendering</Filter>
+    <ClInclude Include="Projectile.h">
+      <Filter>Rendering\Objects\Projectiles</Filter>
     </ClInclude>
-    <ClInclude Include="ConstBuffers.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
+    <ClInclude Include="ConstBuffers.h" />
+    <ClInclude Include="LightHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Media\ZeusIcon.rc">

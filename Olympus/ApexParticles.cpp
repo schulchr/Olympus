@@ -15,7 +15,7 @@ ApexParticles::~ApexParticles()
 
 void ApexParticles::CreateEmitter(NxApexSDK* gApexSDK, NxApexScene* gApexScene,
 	ID3D11DeviceContext *devcon, ID3D11Device *dev,
-	physx::apex::NxUserRenderer* renderer, NxModuleIofx* iofxModule)
+	physx::apex::NxUserRenderer* renderer, NxModuleIofx* iofxModule, const char* filename)
 {
 	mDev = dev;
 	mDevcon = devcon;
@@ -23,7 +23,7 @@ void ApexParticles::CreateEmitter(NxApexSDK* gApexSDK, NxApexScene* gApexScene,
 	gRenderer = renderer;
 
     NxApexEmitterAsset* emitterAsset;
-    physx::apex::NxApexAsset* asset = reinterpret_cast<physx::apex::NxApexAsset*>(gApexSDK->getNamedResourceProvider()->getResource(NX_APEX_EMITTER_AUTHORING_TYPE_NAME, "testSpriteEmitter4ParticleFluidIos"/*"SmokeEmitter"*/));
+    physx::apex::NxApexAsset* asset = reinterpret_cast<physx::apex::NxApexAsset*>(gApexSDK->getNamedResourceProvider()->getResource(NX_APEX_EMITTER_AUTHORING_TYPE_NAME, filename));
     if (asset)
     {
         emitterAsset = static_cast<NxApexEmitterAsset*> (asset);
@@ -46,7 +46,7 @@ void ApexParticles::CreateEmitter(NxApexSDK* gApexSDK, NxApexScene* gApexScene,
         emitterActor = static_cast<NxApexEmitterActor*>(emitterAsset->createApexActor(*descParams,*gApexScene));
         if(emitterActor)
         {
-            emitterActor->setCurrentPosition(PxVec3(0.0f, 20.0f, 500.0f));
+            emitterActor->setCurrentPosition(PxVec3(0.0f, 20.0f, 0.0f));
             emitterActor->startEmit( true );
 			//emitterActor->forcePhysicalLod(
             //emitterActor->setLifetimeRange(physx::apex::NxRange<PxF32>(1,5));
@@ -155,7 +155,14 @@ void ApexParticles::SetEmit(bool on)
 {
 	if(emitterActor)
     {
-        emitterActor->startEmit( on );
+		if(on)
+		{
+			emitterActor->startEmit( on );
+		}
+		else
+		{
+		    emitterActor->stopEmit();
+		}
     }
 }
 
