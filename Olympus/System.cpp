@@ -16,6 +16,8 @@ System::System(HINSTANCE hInstance, int nCmdShow) :
     gSystem = this;
     WNDCLASSEX wc;
 
+	rendManager = NULL;
+
     ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
     wc.cbSize       = sizeof(WNDCLASSEX);
@@ -153,6 +155,86 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 {
 				    PostQuitMessage(0);	
 				    return 0;
+                }
+			    break;
+
+				case 'B': // Esc key has been pressed
+                {
+				   rendManager->projectile->Fire(mCam, 100.0f);
+                }
+			    break;
+				
+				case 0x70: // F1 key has been pressed
+                {
+				   if(rendManager->sceneBuff.textures == 0)
+						rendManager->sceneBuff.textures = 1;
+					else
+						rendManager->sceneBuff.textures = 0;
+                }
+			    break;
+	
+				case 0x71: // F2 key has been pressed
+                {
+					if(rendManager->sceneBuff.normalMap == 0)
+						rendManager->sceneBuff.normalMap = 1;
+					else
+						rendManager->sceneBuff.normalMap = 0;	
+                }
+			    break;
+				
+				case 0x73: // F4 key has been pressed
+                {
+					if(rendManager->emitterOn == true)
+						rendManager->emitterOn = false;
+					else
+						rendManager->emitterOn = true;
+
+					rendManager->SetEmit(rendManager->emitterOn);
+                }
+			    break;	
+
+				case 0x74: // F5 key has been pressed
+                {
+					if(rendManager->sceneBuff.ambientOn == 0)
+						rendManager->sceneBuff.ambientOn = 1;
+					else
+						rendManager->sceneBuff.ambientOn = 0;	
+                }
+			    break;
+
+				case 0x75: // F6 key has been pressed
+                {
+					if(rendManager->sceneBuff.diffuseOn == 0)
+						rendManager->sceneBuff.diffuseOn = 1;
+					else
+						rendManager->sceneBuff.diffuseOn = 0;	
+                }
+			    break;
+
+				case 0x76: // F7 key has been pressed
+                {
+					if(rendManager->sceneBuff.specularOn == 0)
+						rendManager->sceneBuff.specularOn = 1;
+					else
+						rendManager->sceneBuff.specularOn = 0;	
+                }
+			    break;
+
+				case 0x78: // F9 key has been pressed
+                {
+					if(rendManager->sceneBuff.dirLightOn == 0)
+						rendManager->sceneBuff.dirLightOn = 1;
+					else
+						rendManager->sceneBuff.dirLightOn = 0;	
+                }
+			    break;
+
+				case 0x79: // F10 key has been pressed
+                {
+					if(rendManager->sceneBuff.pLightOn == 0)
+						rendManager->sceneBuff.pLightOn = 1;
+					else
+						rendManager->sceneBuff.pLightOn = 0;	
                 }
 			    break;
 		    }
@@ -489,18 +571,61 @@ void System::UpdateCamera(float dt)
 		  mFovFlag = 1;
 	}
 
-	if( (GetAsyncKeyState('B') & 0x8000) )
-    {
-		rendManager->projectile->Fire(mCam, 100.0f);
-    }
-	if( (GetAsyncKeyState('Y') & 0x8000) )
-    {
-		rendManager->SetEmit(true);
-    }
-	if( (GetAsyncKeyState('H') & 0x8000) )
-    {
-		rendManager->SetEmit(false);		
-    }
+	
+	//Numpad 7
+	if( (GetAsyncKeyState(0x67) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->lum < 3.0)
+			rendManager->mScreen->cb->lum += .01;		
+	}
+	//Numpad 4
+	if( (GetAsyncKeyState(0x64) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->lum > 0)
+			rendManager->mScreen->cb->lum -= .01;			
+	}
+
+	//Numpad 8
+	if( (GetAsyncKeyState(0x68) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->gam < 3.0)
+			rendManager->mScreen->cb->gam += .01;			
+	}
+	//Numpad 5
+	if( (GetAsyncKeyState(0x65) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->gam > 0)
+			rendManager->mScreen->cb->gam -= .01;				
+	}
+
+	//Numpad 9
+	if( (GetAsyncKeyState(0x69) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->depthOfField <= .02)
+			rendManager->mScreen->cb->depthOfField += .001;			
+	}
+	//Numpad 6
+	if( (GetAsyncKeyState(0x66) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->depthOfField > 0)
+			rendManager->mScreen->cb->depthOfField -= .001;				
+	}
+
+	//Numpad 9 + left shift
+	if( (GetAsyncKeyState(0x69) & 0x8000) && (GetAsyncKeyState(0xA0) & 0x8000))
+	{
+		if(rendManager->mScreen->cb->dofRange <= .02)
+			rendManager->mScreen->cb->dofRange += .001;			
+	}
+
+	//Numpad 6 + left shift
+	if( (GetAsyncKeyState(0x66) & 0x8000) && (GetAsyncKeyState(0xA0) & 0x8000) )
+	{
+		if(rendManager->mScreen->cb->dofRange > 0)
+			rendManager->mScreen->cb->dofRange -= .001;				
+	}
+
+
 
 	mCam->UpdateViewMatrix();
 }
@@ -543,6 +668,9 @@ void System::OnMouseMove(WPARAM btnState, int x, int y)
 
 void System::OnResize()
 {
+	if(rendManager == NULL)
+		return;
+
 	rendManager->GetScreenParams(mClientWidth, mClientHeight);
 	//Set the new aspect ration for the camera
 	rendManager->mCam->SetLens(0.25f*MathHelper::Pi, (float)mClientWidth/(float)mClientHeight, 1.0f, 10000.0f);

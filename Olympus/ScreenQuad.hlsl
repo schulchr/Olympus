@@ -8,9 +8,14 @@ cbuffer ObjectMat	: register(c1)
     float4x4 viewInvProj;
 	float4x4 viewPrev;
 
-	float	 zNear;
-	float	 zFar;
-	float2	 padding;
+	float zNear;
+	float zFar;
+	float lum;
+	float gam;
+	float depthOfField;
+	float dofRange;
+
+	float2 pad;
 }
 
 Texture2D tex : register(t0);
@@ -38,8 +43,8 @@ VOut VShader(float3 position : POSITION, float3 normal : NORMAL, float3 tangent 
 
 float4 PShader(VOut input) : SV_TARGET
 {   
-	float gamma = 1.5f;
-	float lumt = 1.6f;
+	float gamma = gam;
+	float lumt = lum;
 	float luminance;
     //return depth.Sample(samLinear, input.texcoord).r;
 	//return tex.Sample(samLinear, input.texcoord);
@@ -52,7 +57,7 @@ float4 PShader(VOut input) : SV_TARGET
 	float midDepth = 2*zFar*zNear / (zFar + zNear - (zFar - zNear)*(2*z_b -1));
 	float blurFactor = 1.0;
 
-	float depthRange = .004 * (zFar - zNear );
+	float depthRange = dofRange * (zFar - zNear );
 
 	if( color.r > midDepth - depthRange && color.r < midDepth + depthRange )
 	{
@@ -77,7 +82,7 @@ float4 PShader(VOut input) : SV_TARGET
 
 	color = (tex.Sample( ss, input.texcoord )) * 8.0f;
 	//return float4(1.0,0.0,0.0,1.0);
-	float blur = .000;
+	float blur = depthOfField;
 	
 	color += ( tex.Sample( ss, float2( input.texcoord.x+blur, input.texcoord.y ) ) ) * 2.0f;
 	color += ( tex.Sample( ss, float2( input.texcoord.x-blur, input.texcoord.y ) ) ) * 2.0f;

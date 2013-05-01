@@ -10,6 +10,18 @@ RenderManager::RenderManager(ID3D11DeviceContext *devcon,
 							 D3D11_VIEWPORT *viewport) :
 mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mViewport(viewport)
 {
+
+	sceneBuff.normalMap		= 1;
+	sceneBuff.phong			= 1;
+	sceneBuff.textures		= 1;
+	sceneBuff.ambientOn		= 1;
+	sceneBuff.diffuseOn		= 1;
+	sceneBuff.specularOn	= 1;
+	sceneBuff.dirLightOn	= 1;
+	sceneBuff.pLightOn		= 1;
+
+	emitterOn = true;
+
 	fps = 0;
 	SCREEN_WIDTH = 1280;
 	SCREEN_HEIGHT = 720;
@@ -265,6 +277,8 @@ mDevcon(devcon), mDev(dev), mSwapchain(swapchain), mCam(cam), mApex(apex), mView
 
 	renderables.push_back(emitter);
 	renderables.push_back(particles);
+
+	
 }
 
 
@@ -394,7 +408,7 @@ void RenderManager::Render()
 
 	XMStoreFloat4x4(&sceneBuff.viewProj, mCam->ViewProj());
 	sceneBuff.camPos = mCam->GetPosition();
-	sceneBuff.pad = 1.0f;
+
 	mDevcon->VSSetConstantBuffers(0, 1, &sceneCBuffer);
 	mDevcon->PSSetConstantBuffers(0, 1, &sceneCBuffer);
 

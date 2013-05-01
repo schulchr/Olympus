@@ -118,7 +118,6 @@
     <ClCompile Include="ZeusResourceCallback.cpp">
       <Filter>Rendering\PhysX\Apex\ResourceCallback</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -176,6 +175,9 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>Rendering\Objects\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders.hlsl">
@@ -202,7 +204,12 @@
     <None Include="Sphere.hlsl">
       <Filter>Rendering\Objects\Sphere</Filter>
     </None>
-    <None Include="LightHelper.hlsl" />
+    <None Include="LightHelper.hlsl">
+      <Filter>Rendering</Filter>
+    </None>
+    <None Include="ConstBuffers.hlsl">
+      <Filter>Rendering</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="apex.h">
@@ -289,8 +296,12 @@
     <ClInclude Include="Projectile.h">
       <Filter>Rendering\Objects\Projectiles</Filter>
     </ClInclude>
-    <ClInclude Include="ConstBuffers.h" />
-    <ClInclude Include="LightHelper.h" />
+    <ClInclude Include="ConstBuffers.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="LightHelper.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Media\ZeusIcon.rc">

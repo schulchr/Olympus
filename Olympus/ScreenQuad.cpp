@@ -9,9 +9,11 @@ ScreenQuad::ScreenQuad()
 ScreenQuad::ScreenQuad(ID3D11DeviceContext *mDevcon, ID3D11Device *mDev, GeometryGenerator *geoGen) : 
 	mDevcon(mDevcon), mDev(mDev)
 {
-	cb = new cbuff();
-	cb->viewInvProj;
-	cb->viewPrevProj;
+	cb = new PostPBuff();
+	cb->lum = 1.6f;
+	cb->gam = 1.5f;
+	cb->depthOfField = 0.0f;
+	cb->dofRange = 0.004f;
 
 	CreateGeometry(geoGen);
 	SetupBuffer();
@@ -198,7 +200,7 @@ void ScreenQuad::SetupBuffer()
     ZeroMemory(&bd, sizeof(bd));
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(cbuff);
+    bd.ByteWidth = sizeof(PostPBuff);
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     mDev->CreateBuffer(&bd, NULL, &mConstBuffer);
