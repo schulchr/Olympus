@@ -19,6 +19,11 @@
 #include "apex.h"
 #include <Xinput.h>
 #include "MathHelper.h"
+#include "CharacterController.h"
+
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 // include the Direct3D Library file
 #pragma comment (lib, "d3d11.lib")
@@ -61,7 +66,10 @@ public:
     void UpdateCamera(float dt);
     void OnResize();
 	void fpsCalc();
+	void CheckSceneChange();
 
+	// Random Helper
+	float randomf(float low, float high);
 private:
     // global declarations
     IDXGISwapChain      *swapchain;         // the pointer to the swap chain interface
@@ -77,6 +85,7 @@ private:
     HWND                hWnd;               // The main window
     Camera              *mCam;				// the camera
     Apex*               mApex;
+	CharacterController *cController;
 
     RenderManager       *rendManager; 
     POINT               mLastMousePos;		// the last mouse position
@@ -88,9 +97,13 @@ private:
     int					mClientWidth;
 	int					mClientHeight;
 
+	int					mCurrentScene;
+
+
 	bool				mAppPaused;
 	bool				mMinimized;
 	bool				mMaximized;
 	bool				mResizing;
+    bool                mInitialized;
 };
 #endif

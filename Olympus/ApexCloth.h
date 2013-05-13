@@ -1,11 +1,7 @@
 #pragma once
-//***************************************************************************************
-// ApexParticles.h
-//
-//
-// 
-//
-//***************************************************************************************
+
+// Apex Cloth
+
 #ifndef APEX_CLOTHING_H
 #define APEX_CLOTHING_H
 
@@ -15,6 +11,7 @@
 #include "NxModuleClothing.h"
 #include "NxClothingAsset.h"
 #include "NxClothingActor.h"
+#include "NxClothingCollision.h"
 
 #include "NxParamUtils.h"
 #include <NxApexRenderVolume.h>
@@ -42,11 +39,13 @@ public:
     void CreateCloth(NxApexSDK* gApexSDK, NxApexScene* gApexScene,
 						ID3D11DeviceContext *devcon, 	ID3D11Device *dev,
 					  physx::apex::NxUserRenderer* renderer, const char* filename);
-	void Update();
+	virtual void Update();
 	virtual void RecompileShader();
 
-	void SetPosition(float x, float y, float z);
+	void SetPosition(float x, float y, float z, float rx, float ry, float rz);
 	virtual void Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType);
+
+	physx::apex::NxClothingActor* getClothingActor() {return clothingActor;}
 
 private:
 	ID3D11Device *mDev;

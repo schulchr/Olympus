@@ -11,12 +11,10 @@ System::System()
 }
 
 System::System(HINSTANCE hInstance, int nCmdShow) :
-	mAppPaused(false), mFlyMode(false), mFovFlag(1)
+    mAppPaused(false), mFlyMode(false), mFovFlag(1), rendManager(0), mInitialized(false)
 {
     gSystem = this;
     WNDCLASSEX wc;
-
-	rendManager = NULL;
 
     ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
@@ -53,13 +51,22 @@ System::System(HINSTANCE hInstance, int nCmdShow) :
 
     ShowWindow(hWnd, nCmdShow);
 
+	mCurrentScene = 0;
+
+
+	
+	
+
 }
 
 System::~System() {}
 
 int System::init()
 {
-    return initd3d();
+    int inited = initd3d();
+    if(inited)
+        mInitialized = true;
+    return inited;
 }
 
 int System::run()
@@ -69,6 +76,7 @@ int System::run()
 
 	//RenderFrame(100.0f); // skip forward 100 seconds!
 
+	rendManager->mCurrentScene = 0;
 
 	mTimer.Reset();
 
@@ -110,6 +118,9 @@ int System::run()
 // this is the main message handler for the program
 LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    // If system isn't initialized, return
+
+
     switch(message)
     {
         // WM_ACTIVATE is sent when the window is activated or deactivated.  
@@ -158,12 +169,24 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 }
 			    break;
 
-				case 'B': // Esc key has been pressed
+				case 0x30: // 0 key has been pressed
                 {
-				   rendManager->projectile->Fire(mCam, 100.0f);
+					rendManager->mCurrentScene = 0;
+					rendManager->mApex->setScene(0);
+					cController->SetScene(0);
+					mCurrentScene = 0;
                 }
 			    break;
-				
+
+				case 0x31: // 1 key has been pressed
+                {
+					rendManager->mCurrentScene = 1;
+					rendManager->mApex->setScene(1);
+					cController->SetScene(1);
+					mCurrentScene = 1;
+                }
+			    break;
+
 				case 0x70: // F1 key has been pressed
                 {
 				   if(rendManager->sceneBuff.textures == 0)
@@ -189,7 +212,7 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					else
 						rendManager->emitterOn = true;
 
-					rendManager->SetEmit(rendManager->emitterOn);
+					rendManager->scene[mCurrentScene]->ToggleParticles(rendManager->emitterOn);
                 }
 			    break;	
 
@@ -237,6 +260,12 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						rendManager->sceneBuff.pLightOn = 0;	
                 }
 			    break;
+
+				case 'T': // T key has been pressed
+                {
+					rendManager->scene[mCurrentScene]->ResetPins();	
+                }
+			    break;
 		    }
 	    } break;
 		case WM_SIZE:
@@ -256,7 +285,8 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					mAppPaused = false;
 					mMinimized = false;
 					mMaximized = true;
-					OnResize();
+					if(mInitialized)
+                        OnResize();
 				}
 				else if( wParam == SIZE_RESTORED )
 				{
@@ -266,7 +296,8 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						mAppPaused = false;
 						mMinimized = false;
-						OnResize();
+						if(mInitialized)
+                            OnResize();
 					}
 
 					// Restoring from maximized state?
@@ -274,7 +305,8 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					{
 						mAppPaused = false;
 						mMaximized = false;
-						OnResize();
+						if(mInitialized)
+                            OnResize();
 					}
 					else if( mResizing )
 					{
@@ -289,7 +321,8 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 					else // API call such as SetWindowPos or mSwapChain->SetFullscreenState.
 					{
-						OnResize();
+						if(mInitialized)
+                            OnResize();
 					}
 				}
 			}
@@ -308,7 +341,8 @@ LRESULT System::msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				mAppPaused = false;
 				mResizing  = false;
 				mTimer.Start();
-				OnResize();
+                if(mInitialized)
+                    OnResize();
 				return 0;
     }
 
@@ -371,29 +405,185 @@ int System::initd3d()
 	mCam = new Camera();
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
-    mCam->SetPosition(0.0f, 5.0f, 10.0f);
-	//mCam->RotateY(90);
+    mCam->SetPosition(100.0f, 0.0f, 0.0f);
+	mCam->RotateY(-3.1415);
 	mCam->SetLens(0.25f*MathHelper::Pi, (float)SCREEN_WIDTH/(float)SCREEN_HEIGHT, 1.0f, 10000.0f);
+    mCam->UpdateViewMatrix();
 
     mApex = new Apex();
     mApex->Init(dev, devcon);
     mApex->InitParticles();
     mApex->InitClothing();
+	//mApex->UpdateViewProjMat(&mCam->View(),&mCam->Proj(), 1.0f, 10000.0f, 0.25f*MathHelper::Pi, mClientWidth, mClientHeight);
+
+	
 
 	rendManager = new RenderManager(devcon, dev, swapchain, mApex, mCam, &mViewport);
+
+	cController = new CharacterController(rendManager->mApex);
     return InitPipeline();
 }
 
+
+void System::CheckSceneChange()
+{
+	XMVECTOR camPos = mCam->GetPositionXM();
+	
+	if(mCurrentScene == 0)
+	{
+
+		XMVECTOR spherePos1 = XMLoadFloat3(&XMFLOAT3( 0.0 , -12.0 , -50.0 ) );
+		XMVECTOR vectorSub = XMVectorSubtract(camPos,spherePos1);
+		XMVECTOR length1 = XMVector3Length(vectorSub);
+
+		XMVECTOR spherePos2 = XMLoadFloat3(&XMFLOAT3( 0.0 , 0.0 , 0.0 ) );
+		vectorSub = XMVectorSubtract(camPos, spherePos2);
+		XMVECTOR length2 = XMVector3Length(vectorSub);
+
+		XMVECTOR spherePos3 = XMLoadFloat3(&XMFLOAT3( 0.0 , 0.0 , 50.0 ) );
+		vectorSub = XMVectorSubtract(camPos, spherePos3);
+		XMVECTOR length3 = XMVector3Length(vectorSub);
+
+		XMVECTOR spherePos4 = XMLoadFloat3(&XMFLOAT3( 0.0 , 0.0 , 100.0 ) );
+		vectorSub = XMVectorSubtract(camPos, spherePos4);
+		XMVECTOR length4 = XMVector3Length(vectorSub);
+	
+		float distance1 = 0.0f;
+		float distance2 = 0.0f;
+		float distance3 = 0.0f;
+		float distance4 = 0.0f;
+
+		XMStoreFloat(&distance1,length1);
+		XMStoreFloat(&distance2,length2);
+		XMStoreFloat(&distance3,length3);
+		XMStoreFloat(&distance4,length4);
+
+		if(abs(distance1) < 10.0f)
+		{
+			rendManager->mCurrentScene = 1;
+			rendManager->mApex->setScene(1);
+			cController->SetScene(1);
+			mCurrentScene = 1;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+
+		if(abs(distance2) < 10.0f)
+		{
+			rendManager->mCurrentScene = 2;
+			rendManager->mApex->setScene(2);
+			cController->SetScene(2);
+			mCurrentScene = 2;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+
+		if(abs(distance3) < 10.0f)
+		{
+			rendManager->mCurrentScene = 3;
+			rendManager->mApex->setScene(3);
+			cController->SetScene(3);
+			mCurrentScene = 3;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+
+		if(abs(distance4) < 10.0f)
+		{
+			rendManager->mCurrentScene = 4;
+			rendManager->mApex->setScene(4);
+			cController->SetScene(4);
+			mCurrentScene = 4;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+	}
+
+
+
+		XMVECTOR hubSpherePos = XMLoadFloat3(&XMFLOAT3( 70.0 , 70.0 , 70.0 ) );
+		XMVECTOR vectorSub = XMVectorSubtract(camPos, hubSpherePos);
+		XMVECTOR length = XMVector3Length(vectorSub);
+	
+		float hubSphereDist = 0.0f;
+
+	
+		XMStoreFloat(&hubSphereDist,length);
+
+	if(hubSphereDist < 10.0f)
+	{
+		if(mCurrentScene == 1)
+		{
+			rendManager->mCurrentScene = 0;
+			rendManager->mApex->setScene(0);
+			cController->SetScene(0);
+			mCurrentScene = 0;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+
+		if(mCurrentScene == 2)
+		{
+			rendManager->mCurrentScene = 0;
+			rendManager->mApex->setScene(0);
+			cController->SetScene(0);
+			mCurrentScene = 0;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+
+		if(mCurrentScene == 3)
+		{
+			rendManager->mCurrentScene = 0;
+			rendManager->mApex->setScene(0);
+			cController->SetScene(0);
+			mCurrentScene = 0;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+
+		if(mCurrentScene == 4)
+		{
+			rendManager->mCurrentScene = 0;
+			rendManager->mApex->setScene(0);
+			cController->SetScene(0);
+			mCurrentScene = 0;
+
+			mCam->SetPosition(100.0f, 0.0f, 0.0f);
+			mCam->UpdateViewMatrix();
+			return;
+		}
+	}
+
+}
 
 
 // this is the function used to render a single frame
 void System::RenderFrame(float dt)
 {
+	
+	CheckSceneChange();
+
 	mApex->UpdateViewProjMat(&mCam->View(),&mCam->Proj(), 1.0f, 10000.0f, 0.25f*MathHelper::Pi, mClientWidth, mClientHeight);
 	bool fetch = mApex->advance(dt);
 
-	rendManager->Update(dt);
 	UpdateCamera(dt);
+	rendManager->scene[mCurrentScene]->UpdateReflective(mCam);
+	rendManager->Update(dt);
 
 	if(fetch)
         mApex->fetch();
@@ -431,7 +621,7 @@ int System::InitPipeline()
 /////////////////////////////////////
 // CAMERA STUFF
 /////////////////////////////////////
-
+float cooldown = 0.0f;
 void System::UpdateCamera(float dt)
 {
 	//////////////////////////////////
@@ -513,16 +703,20 @@ void System::UpdateCamera(float dt)
 		XMFLOAT3 camPos = mCam->GetPosition();
 		if(mFlyMode == false)
 		{
+			if(!(state.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)){
+				cController->move(mCam->GetRight().x, -9.8, mCam->GetRight().z, dt);
+			}
+			if(!(state.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)){
+				cController->move(-mCam->GetRight().x, -9.8, -mCam->GetRight().z, dt);
+			}
+			if(!(state.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)){
+				cController->move(mCam->GetLook().x, -9.8, mCam->GetLook().z, dt);
+			}
+			if(!(state.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)){
+				cController->move(-mCam->GetLook().x, -9.8, -mCam->GetLook().z, dt);
+			} 
 			
-			mCam->SetPosition(camPos.x, 2.0f, camPos.z);
-	
-			//crouch
-			if(state.Gamepad.wButtons & XINPUT_GAMEPAD_B)
-				mCam->SetPosition(camPos.x, 1.0f, camPos.z);
-
-			//jump
-			if(state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
-				mCam->SetPosition(camPos.x, 5.0f, camPos.z);
+		mCam->SetPosition(cController->pCharacter->getPosition().x, cController->pCharacter->getPosition().y, cController->pCharacter->getPosition().z); 
 		}
 		else
 		{
@@ -530,12 +724,43 @@ void System::UpdateCamera(float dt)
 		}
 		float shootspeed;
         // Shoot block with right trigger     
-        if( state.Gamepad.bRightTrigger && state.Gamepad.bLeftTrigger < 256 )
+		if(cooldown > 0)
+		{
+			cooldown -= dt;
+		} 
+		else if( state.Gamepad.bRightTrigger && state.Gamepad.bLeftTrigger < 256 )
         {
-            shootspeed = (state.Gamepad.bRightTrigger / 255) * 100.0f;
-			rendManager->projectile->Fire(mCam, shootspeed);
+			XMFLOAT3 originalPos = mCam->GetPosition();
+			shootspeed = /*(state.Gamepad.bRightTrigger / 255) * */50.0f;
+			rendManager->scene[mCurrentScene]->Fire(mCam, shootspeed);	
+			/*for(int i = 0; i < 20; i++)
+			{
+				mCam->SetPosition(originalPos.x + 5 * sinf(i), originalPos.y, originalPos.z + 5 * cosf(i));
+				rendManager->scene->Fire(mCam, shootspeed);	
+			}
+			mCam->SetPosition(originalPos.x, originalPos.y, originalPos.z);*/
+			cooldown += 0.25f;
         }
 		
+		if( state.Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+		{
+			if(cooldown > 0)
+			{
+				cooldown--;
+			}
+			else
+			{
+				ofstream myfile;
+				myfile.open("treepositions.txt", ios::app);
+				float scale = randomf(0.12,0.24);
+				myfile  << "i " << camPos.x << " " << camPos.y << " " << camPos.z << " " 
+						<< scale << " " << scale << " " << scale << " " << "0.0" << " " << randomf(0.0, 6.2832) << " " << "0.0" << endl;
+				myfile  << "a 0.2 0.2 0.2 1.0 0.3 0.3 0.3 1.0 0.9 0.9 0.9 10.0 0.0 0.0 0.0 0.0 0" << endl;
+				myfile  << "a 0.2 0.2 0.2 1.0 0.3 0.3 0.3 1.0 0.9 0.9 0.9 70.0 0.0 0.0 0.0 0.0 1" << endl;
+				myfile.close();
+				cooldown += 10.0f;
+			}
+		}
     }
     else{ // Controller is disconnected, oh balls
         float speed = 10.0f;
@@ -544,7 +769,11 @@ void System::UpdateCamera(float dt)
             speed = 140.0f;
 
         if( GetAsyncKeyState('W') & 0x8000 )
+		{
             mCam->Walk(speed*dt);
+			//cController->move(mCam->GetPosition().x, mCam->GetPosition().y, mCam->GetPosition().z, dt);
+			//mCam->SetPosition(cController->getPosition().x, cController->getPosition().y, cController->getPosition().z);
+		}
 
         if( GetAsyncKeyState('S') & 0x8000 )
             mCam->Walk(-speed*dt);
@@ -571,13 +800,18 @@ void System::UpdateCamera(float dt)
 		  mFovFlag = 1;
 	}
 
-	
+	if( (GetAsyncKeyState('B') & 0x8000) )
+    {
+		rendManager->scene[mCurrentScene]->Fire(mCam, 100.0f);
+    }
+
 	//Numpad 7
 	if( (GetAsyncKeyState(0x67) & 0x8000) )
 	{
 		if(rendManager->mScreen->cb->lum < 3.0)
 			rendManager->mScreen->cb->lum += .01;		
 	}
+
 	//Numpad 4
 	if( (GetAsyncKeyState(0x64) & 0x8000) )
 	{
@@ -602,13 +836,13 @@ void System::UpdateCamera(float dt)
 	if( (GetAsyncKeyState(0x69) & 0x8000) )
 	{
 		if(rendManager->mScreen->cb->depthOfField <= .02)
-			rendManager->mScreen->cb->depthOfField += .001;			
+			rendManager->mScreen->cb->depthOfField += .00001;			
 	}
 	//Numpad 6
 	if( (GetAsyncKeyState(0x66) & 0x8000) )
 	{
 		if(rendManager->mScreen->cb->depthOfField > 0)
-			rendManager->mScreen->cb->depthOfField -= .001;				
+			rendManager->mScreen->cb->depthOfField -= .00001;				
 	}
 
 	//Numpad 9 + left shift
@@ -624,8 +858,6 @@ void System::UpdateCamera(float dt)
 		if(rendManager->mScreen->cb->dofRange > 0)
 			rendManager->mScreen->cb->dofRange -= .001;				
 	}
-
-
 
 	mCam->UpdateViewMatrix();
 }
@@ -729,7 +961,10 @@ void System::OnResize()
 
 	dev->CreateDepthStencilView(rendManager->mDepthTargetTexture, &dsvd, &rendManager->mZbuffer);
 
-	rendManager->mSphere->mZbuffer = rendManager->mZbuffer;
+	for(int i = 0; i <= mCurrentScene; i++)
+	{
+		rendManager->scene[i]->UpdateZbuffers(rendManager->mZbuffer);
+	}
 	
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 
@@ -756,3 +991,8 @@ void System::OnResize()
     devcon->RSSetViewports(1, &mViewport);
 }
  
+
+float System::randomf(float low, float high)
+{
+	return low + (float)rand()/((float)RAND_MAX/(high-low));
+}

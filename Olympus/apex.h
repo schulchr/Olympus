@@ -17,12 +17,14 @@
 #include "ZeusRenderResourceManager.h"
 #include "ApexParticles.h"
 #include "ApexCloth.h"
+
 //#include "Object.h"
 #include "ZeusResourceCallback.h"
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dx10.h>
 #include <vector>
+#include "LightHelper.h"
 
 //using namespace std;
 using namespace physx;
@@ -47,6 +49,8 @@ struct ObjectInfo
 	float x,y,z;
 	float sx,sy,sz;
 	float rx, ry, rz;
+
+	vector<Material> materials; //one per mesh
 };
 #endif
 
@@ -57,28 +61,33 @@ public:
     Apex();
     ~Apex();
 
-    bool Init(ID3D11Device* dev, ID3D11DeviceContext* devcon);
-    bool InitParticles();
-    bool InitClothing();
+    bool						Init(ID3D11Device* dev, ID3D11DeviceContext* devcon);
+    bool						InitParticles();
+    bool						InitClothing();
 
-	ApexParticles* CreateEmitter(physx::apex::NxUserRenderer* renderer, const char* filename);
-    ApexCloth* CreateCloth(physx::apex::NxUserRenderer* renderer, const char* filename);
+    ApexParticles*				CreateEmitter(physx::apex::NxUserRenderer* renderer, const char* filename);
+    ApexCloth*					CreateCloth(physx::apex::NxUserRenderer* renderer, const char* filename);
+	void						CreatePlane(float nx, float ny, float nz, float distance);
 
-    bool advance(float dt);
-    void fetch();
-	void UpdateViewProjMat(XMMATRIX* view, XMMATRIX* proj, float nearPlane, float farPlane, float fov, float vWidth, float vHeight);
-	void PxtoXMMatrix(PxTransform input, XMMATRIX* start);
-	void XMtoPxMatrix(XMMATRIX* input, PxMat44* start);
+    bool						advance(float dt);
+    void						fetch();
+	void						UpdateViewProjMat(XMMATRIX* view, XMMATRIX* proj, float nearPlane, float farPlane, float fov, float vWidth, float vHeight);
+	void						PxtoXMMatrix(PxTransform input, XMMATRIX* start);
+	void						XMtoPxMatrix(XMMATRIX* input, PxMat44* start);
 
-    void Render();
+	bool						CreateScene();
 
 
+    void						Render();
 	
+	int							mCurrentScene;
+	void						setScene(int sceneNum){mCurrentScene = sceneNum;}
+
 
 	bool checkErrorCode(NxApexCreateError* err);
 private:
     NxApexSDK*                  gApexSDK;
-    NxApexScene*                gApexScene;
+    vector<NxApexScene*>        gApexScene;
     physx::apex::NxUserRenderResourceManager*	m_renderResourceManager;
 
     ApexParticles*				gApexParticles;
@@ -97,17 +106,21 @@ private:
 // PhysX
 public:
 	void LoadTriangleMesh(int numVerts, PxVec3* verts, ObjectInfo info);
-	PxScene*	getScene() {return mScene;}
+	void LoadDynamicTriangleMesh(int numVerts, PxVec3* verts, ObjectInfo info);
+	PxScene*	getScene() {return mScene[mCurrentScene];}
 	PxPhysics*	getPhysics() {return mPhysics;}
+	PxFoundation* getFoundation() {return mFoundation;}
+	void getRigidDynamicPosition(int index, XMFLOAT4X4 *position);
 
-private:
+
     bool InitPhysX();
 	
+	vector<PxRigidActor*>		dynamicActors;
     PxFoundation*               mFoundation;
     PxPhysics*                  mPhysics;
     PxProfileZoneManager*       mProfileZoneManager;
     PxCooking*                  mCooking;
-    PxScene*                    mScene;
+    vector<PxScene*>            mScene;
     PxDefaultCpuDispatcher*     mCpuDispatcher;
     pxtask::CudaContextManager* mCudaContextManager;
     PxU32                       mNbThreads;

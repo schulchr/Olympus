@@ -1,17 +1,17 @@
 #include "LightHelper.hlsl"
 #include "ConstBuffers.hlsl"
 
-cbuffer SceneBuff : register(b0)
+cbuffer SceneBuff 	: register(b0)
 {
     SceneBuffer sceneBuff;
 }
+
 cbuffer ObjectMat	: register(b1)
 {
 	float4x4 matFinal;
 	float4x4 matInvFinal;
 	Material material;
 }
-
 
 TextureCube dynamicCubeMap;
 
@@ -65,7 +65,7 @@ float4 PShader(VOut input) : SV_TARGET
 	float3 lightVec;
 	float diffuseFactor;
 	float specFactor;
-	float3 v ;
+	float3 v;
 	float d;
 
 	input.NormalW = normalize(input.NormalW);
@@ -98,26 +98,24 @@ float4 PShader(VOut input) : SV_TARGET
 	{
 		dirAmbient	+= saturate(dirLight[i].Ambient);
 
-
-		//lightVec = -dirLight[i].Direction.xyz;
 		lightVec = -dirLight[i].Direction.xyz;
 		lightVec = normalize(lightVec);
-		diffuseFactor = dot(lightVec, bumpedNormalW);
+		diffuseFactor = dot(lightVec, normalize(bumpedNormalW));
 
-
-		if(diffuseFactor > 0.0f)
+		[flatten]
+		if(diffuseFactor >= 0.0f)
 		{
 			dirDiffuse += saturate(diffuseFactor * dirLight[i].Diffuse);
 			
 			v = reflect(-lightVec, bumpedNormalW);
 
-			specFactor	 = pow(max(dot(v, toEye), 0.0f), dirLight[i].Specular.w);
+			specFactor	 = pow(max(dot(v, toEye), 0.0f), 50.0f);
 			
-			dirSpec    += saturate(specFactor * dirLight[i].Specular);
+			dirSpec    += specFactor * dirLight[i].Specular;
 		}
 	
 	}
-
+    //return float4(dirSpec.xyz,1.0f);
 	totalAmbient += dirAmbient;
 	totalDiffuse += dirDiffuse;
 	totalSpec	 += dirSpec;

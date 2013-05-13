@@ -2,7 +2,7 @@
 
 Object::Object()
 {
-	
+
 }
 //---------------------------------------------------------------------------------------
 // Character Loader here
@@ -25,16 +25,11 @@ void Object::objLoad( char* filename, vector<LPCSTR> *textures, vector<LPCSTR> *
 	numMeshes = Import( filename, &vertexes );
 	ID3D11Buffer* tempVB;
 
-	Material tempMat;
-
-	tempMat.Ambient		= XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-	tempMat.Diffuse		= XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-	tempMat.Specular	= XMFLOAT4(0.0f, 0.0f, 1.0f, 10.0f);
-	tempMat.Reflect		= XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+	
 
 	for( int i = 0; i < numMeshes; i++ )
 	{
-		int numVerts = vertexes[i].size();
+        int numVerts = vertexes[i].size();
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
 		bd.Usage = D3D11_USAGE_DEFAULT;
@@ -49,10 +44,6 @@ void Object::objLoad( char* filename, vector<LPCSTR> *textures, vector<LPCSTR> *
 			return;
 
 		vertexBuffer.push_back( tempVB );
-
-		materials.push_back( tempMat );
-
-		
 	}
 	// Save the Vertex Buffer for easy access
 	//vertexBuffer = pVBuffer1;
@@ -120,7 +111,7 @@ void Object::objLoad( char* filename, vector<LPCSTR> *textures, vector<LPCSTR> *
     bd.ByteWidth = sizeof(cbuffs);
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-    dev1->CreateBuffer(&bd, NULL, &worldCBuffer);
+    hr = dev1->CreateBuffer(&bd, NULL, &worldCBuffer);
 }
 
 void Object::renderO( ID3D11DeviceContext * devcon)
@@ -163,7 +154,7 @@ void Object::AddInstance(ObjectInfo info)
 	rot *= XMMatrixRotationX(info.rx);
 	rot *= XMMatrixRotationZ(info.rz);
 
-	XMStoreFloat4x4(&final, XMMatrixMultiply(scale,  XMMatrixMultiply(trans, rot) ) );
+	XMStoreFloat4x4(&final, XMMatrixMultiply(scale,  XMMatrixMultiply(rot, trans) ) );
 
 	mWorldMats.push_back(final);
 	for( int i = 0; i < numMeshes; i++ )
@@ -176,8 +167,18 @@ void Object::AddInstance(ObjectInfo info)
 			vertices[j].y = vertexes[i][j].Pos.y;
 			vertices[j].z = vertexes[i][j].Pos.z;
 		}
-		mApex->LoadTriangleMesh(numVerts, vertices, info);
+		if(info.materials[i].dynamicOn)
+		{
+			mApex->LoadDynamicTriangleMesh(numVerts, vertices, info);
+		}
+		else
+		{
+			mApex->LoadTriangleMesh(numVerts, vertices, info);
+		}
 	}
+
+    // For this instance, have these materials for the # of meshes
+    materials.push_back( info.materials );
 }
 
 
@@ -206,11 +207,55 @@ void Object::Render(ID3D11Buffer *sceneBuff, Camera *mCam, int renderType)
 		// select which primtive type we are using
 		devcon1->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		cb.material = materials[i];
+		
 
 		for( int j = 0; j < mWorldMats.size(); j++)
 		{
+			cb.material = materials[j][i]; // Per mesh
+
+			tempMat = XMLoadFloat4x4(&mWorldMats[j]);
+			tempMat = XMMatrixInverse(&XMMatrixDeterminant(tempMat), tempMat);
 			
+			
+			cb.matWorld = mWorldMats[j];
+			XMStoreFloat4x4(&cb.matWorldInvTrans, tempMat);
+
+			devcon1->UpdateSubresource(worldCBuffer, 0, 0, &cb, 0, 0);
+			devcon1->Draw( vertexes[i].size(),0);
+		}
+	}
+}
+
+void Object::Depth()
+{
+	XMMATRIX tempMat;
+	
+
+	UINT stride = sizeof(Vertex);
+    UINT offset = 0;
+
+	devcon1->VSSetShader(opVS, 0, 0);
+	devcon1->PSSetShader(NULL, 0, 0);
+	
+	devcon1->VSSetConstantBuffers(1, 1, &worldCBuffer);
+	devcon1->PSSetConstantBuffers(1, 1, &worldCBuffer);
+
+	for( int i = 0; i < numMeshes; i++ )
+	{
+		devcon1->IASetInputLayout(objLayout);
+		devcon1->PSSetShaderResources(0, 1, &texArray[i] );
+		devcon1->PSSetShaderResources(1, 1, &NormArray[i] );
+
+		devcon1->IASetVertexBuffers(0, 1, &vertexBuffer[i], &stride, &offset);
+
+		// select which primtive type we are using
+		devcon1->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		
+
+		for( int j = 0; j < mWorldMats.size(); j++)
+		{
+			cb.material = materials[j][i]; // Per mesh
 
 			tempMat = XMLoadFloat4x4(&mWorldMats[j]);
 			tempMat = XMMatrixInverse(&XMMatrixDeterminant(tempMat), tempMat);

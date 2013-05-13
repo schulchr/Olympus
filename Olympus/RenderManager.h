@@ -22,6 +22,7 @@
 #include "GameTimer.h"
 #include "ConstBuffers.h"
 #include "LightHelper.h"
+#include <string>
 using namespace std;
 
 enum renderTargets
@@ -100,10 +101,12 @@ public:
 	Camera *mCam;
 	Camera *mScreenCam;
 	GroundPlane *mGrid;
-	Sphere *mSphere;
-	Sphere *mSphereMove;
-	Sphere *sphere2;
 	
+	vector<Scene*> scene;
+	
+	int		mCurrentScene;
+
+
 	ID3D11Buffer *sceneCBuffer;
 	ID3D11Buffer *dirLightCBuffer;
 	ID3D11Buffer *pointLightCBuffer;
@@ -114,8 +117,11 @@ public:
 
 	ApexParticles* particles;
 	ApexParticles* emitter;
+	ApexParticles* torch1;
+	ApexParticles* torch2;
+    ApexCloth* mCloth;
 	
-	vector<Renderable*> renderables;
+	
 
 	SceneBuff sceneBuff;
 
@@ -124,7 +130,7 @@ public:
 
 	DirectionalLight mDirLight[2];
 	PointLight		 mPointLight[2];
-	
+
 	bool emitterOn;
 
 	FontSheet mFont;
@@ -133,6 +139,15 @@ public:
 	POINT hairPos;
 	POINT posPos;
 	string sText;
+
+		//Shadow Varibles
+	D3D11_VIEWPORT mShadowPort;
+    ID3D11Texture2D* pShadowMap;
+    ID3D11DepthStencilView* pShadowMapDepthView;
+    ID3D11ShaderResourceView* pShadowMapSRView;
+    Camera *mShadowCam;
+    ID3D11Buffer *shadowCBuffer;
+    ShadowBuff shadowBuff;
 };
 
 

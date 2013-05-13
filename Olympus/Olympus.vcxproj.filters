@@ -11,9 +11,6 @@
     <Filter Include="Rendering">
       <UniqueIdentifier>{e32bb8b1-451a-46ab-aa56-66ec756898b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\shaders">
-      <UniqueIdentifier>{8d7c2572-2f53-4144-8b01-b2e5c77cd94b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{9a5cdafb-2f2d-45eb-b937-888bcf1420b1}</UniqueIdentifier>
     </Filter>
@@ -47,9 +44,6 @@
     <Filter Include="Rendering\PhysX\Apex">
       <UniqueIdentifier>{a1a775ca-a0be-4e22-9ff9-ca8e093517e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\PhysX\Apex\ApexParticles">
-      <UniqueIdentifier>{ea8de009-e5b4-4078-8019-338d0a7a0837}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering\PhysX\Apex\RenderResourceManager">
       <UniqueIdentifier>{0bfd4751-4717-4349-a8c0-d0aa0b18772a}</UniqueIdentifier>
     </Filter>
@@ -58,12 +52,6 @@
     </Filter>
     <Filter Include="Rendering\PhysX\Apex\ResourceCallback">
       <UniqueIdentifier>{b29e21c1-b331-482e-93e2-2414fa9b2376}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\PhysX\Apex\ApexCloth">
-      <UniqueIdentifier>{d0f5c6ea-c6cd-44c7-bb1e-edfbfbdbba2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\PhysX\Apex\ApexDestruction">
-      <UniqueIdentifier>{5e19b906-d1a3-45db-9d45-33f9b13a9ba1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Rendering\PhysX\PhysXHeightField">
       <UniqueIdentifier>{242a9e9e-07cb-41f7-b5c1-012165e44d7a}</UniqueIdentifier>
@@ -101,6 +89,9 @@
     <Filter Include="Rendering\Objects\Projectiles">
       <UniqueIdentifier>{860c1009-e313-465f-9f82-ff095ab77d19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Scene">
+      <UniqueIdentifier>{8d7c2572-2f53-4144-8b01-b2e5c77cd94b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="apex.cpp">
@@ -118,6 +109,7 @@
     <ClCompile Include="ZeusResourceCallback.cpp">
       <Filter>Rendering\PhysX\Apex\ResourceCallback</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -175,14 +167,14 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>Rendering\Objects\Projectiles</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Rendering</Filter>
+    <ClCompile Include="ApexDestructable.cpp">
+      <Filter>Rendering\Objects\ApexDestructable</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterController.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders.hlsl">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="OnScreen.hlsl">
       <Filter>Rendering\Objects\OnScreen</Filter>
     </None>
@@ -205,10 +197,67 @@
       <Filter>Rendering\Objects\Sphere</Filter>
     </None>
     <None Include="LightHelper.hlsl">
-      <Filter>Rendering</Filter>
+      <Filter>Rendering\Objects\Helpers</Filter>
     </None>
     <None Include="ConstBuffers.hlsl">
-      <Filter>Rendering</Filter>
+      <Filter>Rendering\Objects\Helpers</Filter>
+    </None>
+    <None Include="Scene\archway.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\bigbadman.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\terrain.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\torch.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\trees.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="destructableshader.hlsl">
+      <Filter>Rendering\Objects\ApexDestructable</Filter>
+    </None>
+    <None Include="clothshader.hlsl">
+      <Filter>Rendering\Objects\ApexCloth</Filter>
+    </None>
+    <None Include="Scene\woodbridge.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\windmill.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\crate.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\arenapit.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\deadman.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\physx.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\envirospheres.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\settings.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\Scene1.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\Scene0.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\physx1.txt">
+      <Filter>Resource Files\Scene</Filter>
+    </None>
+    <None Include="Scene\hub.txt">
+      <Filter>Resource Files\Scene</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -296,11 +345,17 @@
     <ClInclude Include="Projectile.h">
       <Filter>Rendering\Objects\Projectiles</Filter>
     </ClInclude>
-    <ClInclude Include="ConstBuffers.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="LightHelper.h">
-      <Filter>Rendering</Filter>
+      <Filter>Rendering\Objects\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstBuffers.h">
+      <Filter>Rendering\Objects\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ApexDestructable.h">
+      <Filter>Rendering\Objects\ApexDestructable</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterController.h">
+      <Filter>Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

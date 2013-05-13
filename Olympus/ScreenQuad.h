@@ -11,8 +11,6 @@
 #include "Renderable.h"
 #include "ConstBuffers.h"
 
-
-
 class ScreenQuad : public Renderable
 {
 public:

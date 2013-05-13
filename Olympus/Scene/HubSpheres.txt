@@ -1,0 +1,9 @@
+# environment mapped spheres
+# s is a normal environment mapped sphere
+# r is a dynamic reflective environment map
+# s radius slices stacks x y z
+
+s 10.0 30.0 30.0 0.0 0.0 -50.0
+s 10.0 30.0 30.0 0.0 0.0 0.0
+s 10.0 30.0 30.0 0.0 0.0 50.0
+s 10.0 30.0 30.0 0.0 0.0 100.0
